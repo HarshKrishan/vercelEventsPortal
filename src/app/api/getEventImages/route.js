@@ -2,7 +2,8 @@ import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
-
+import fs from "fs";
+import path from "path";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const cache = "no-store";
@@ -10,9 +11,28 @@ export const cache = "no-store";
 export async function POST(req) {
     // console.log("entering getAllEvents route");
 
+    const request = await req.json();
+    // console.log("request",request);
+    const {eventId} = request;
+    const {eventName} = request;
+    // console.log("data:",eventId,eventName)
+    try{
+        //  const dirRelativeToPublicFolder = "/uploads/"+eventName+"/";
 
-    const {eventId} = await req.json();
-
+        //  const dir = path.resolve("./public", dirRelativeToPublicFolder);
+        const dir = path.resolve("./public/uploads/"+eventName+"/");
+         const filenames = fs.readdirSync(dir);
+        return NextResponse.json(
+            {result:filenames},
+            {status:200},
+        );
+    }catch(err){
+        console.log("error",err);
+        return NextResponse.json(
+            {result:"Error getting images"},
+            {status:500}
+        );
+    }
 
     //for local sql
     // connectSql();
@@ -23,6 +43,10 @@ export async function POST(req) {
         
     // }).catch((err) => {
     //     console.log(err);
+    //     return NextResponse.json(
+    //         {result:"Error getting images"},
+    //         {status:500}
+    //     );
     // }
     // );
 
@@ -32,19 +56,19 @@ export async function POST(req) {
     // );
 
     //for vercel sql
-    const client = createClient();
-    await client.connect();
+    // const client = createClient();
+    // await client.connect();
 
-    try {
-        const { rows, fields } = await client.sql`select * from images where events_eventid = ${eventId};`;
-        return NextResponse.json({ result: rows }, { status: 200 });
+    // try {
+    //     const { rows, fields } = await client.sql`select * from images where events_eventid = ${eventId};`;
+    //     return NextResponse.json({ result: rows }, { status: 200 });
 
-    } catch (error) {
-        console.log("error connecting sql", error)
-    }
-    finally {
-        await client.end();
-    }
-    revalidatePath("https://iiit-events-portal.vercel.app/dashboardAdmin")
-    return NextResponse.json({ result: "Error getting images" }, { status: 200 });
+    // } catch (error) {
+    //     console.log("error connecting sql", error)
+    // }
+    // finally {
+    //     await client.end();
+    // }
+    // revalidatePath("https://iiit-events-portal.vercel.app/dashboardAdmin")
+    // return NextResponse.json({ result: "Error getting images" }, { status: 200 });
 }

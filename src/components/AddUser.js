@@ -36,30 +36,7 @@ const AddUser = ({ visible, handleCLick }) => {
     }
 
     //for local
-    // fetch("http://localhost:3000/api/addUser", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     handleCLick();
-    //     setFirstName("");
-    //     setLastName("");
-    //     setPassword("");
-    //     setEmail("");
-    //     setStatus("active");
-    //     setRole("admin");
-
-    //   })
-    //   .then((json) => console.log(json));
-
-
-    //for vercel
-
-    fetch("https://iiit-events-portal.vercel.app/api/addUser", {
+    fetch("http://localhost:3000/api/addUser", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -78,6 +55,29 @@ const AddUser = ({ visible, handleCLick }) => {
 
       })
       .then((json) => console.log(json));
+
+
+    //for vercel
+
+    // fetch("https://iiit-events-portal.vercel.app/api/addUser", {
+    //   method: "POST",
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //     handleCLick();
+    //     setFirstName("");
+    //     setLastName("");
+    //     setPassword("");
+    //     setEmail("");
+    //     setStatus("active");
+    //     setRole("admin");
+
+    //   })
+    //   .then((json) => console.log(json));
   };
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200">

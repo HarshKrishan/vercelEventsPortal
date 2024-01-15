@@ -18,36 +18,43 @@ export async function POST(req) {
   const path = `./public/uploads/${name}`;
 
   //for local sql
-  // connectSql();
-  // const query = `INSERT INTO events (eName, eDate, eOrgEmail, fundedBy, fund, links, imageURI, Users_emailId) VALUES ('${name}', '${date}', '${organiser}', '${fundedBy}', '${fund}', '${link}', '${name}', '${organiser}')`;
+  connectSql();
+  const query = `INSERT INTO events (eName, eDate, eOrgEmail, fundedBy, fund, links, imageURI, Users_emailId) VALUES ('${name}', '${date}', '${organiser}', '${fundedBy}', '${fund}', '${link}', '${name}', '${organiser}')`;
 
-  // const res = await connection
-  //   .promise()
-  //   .query(query)
-  //   .then(([data, fields]) => {
-  //     // console.log(data);
-  //     return data;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-
+  const res = await connection
+    .promise()
+    .query(query)
+    .then(([data, fields]) => {
+      // console.log(data);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return NextResponse.json(
+        { result: "Error occured while adding event" },
+        { status: 200 }
+      );
+    });
+    return NextResponse.json(
+      { result: res },
+      { status: 200 }
+    );
 
   //for vercel sql
-  const client = createClient();
-  await client.connect();
+  // const client = createClient();
+  // await client.connect();
 
-  try {
-    const { rows, fields } = await client.sql`INSERT INTO events (ename, edate, eorgemail, fundedBy, fund, links, imageuri, users_emailid) VALUES (${name}, ${date}, ${organiser}, ${fundedBy}, ${fund}, ${link}, ${name}, ${organiser})`;
-    return NextResponse.json({ result: rows }, { status: 200 });
+  // try {
+  //   const { rows, fields } = await client.sql`INSERT INTO events (ename, edate, eorgemail, fundedBy, fund, links, imageuri, users_emailid) VALUES (${name}, ${date}, ${organiser}, ${fundedBy}, ${fund}, ${link}, ${name}, ${organiser})`;
+  //   return NextResponse.json({ result: rows }, { status: 200 });
 
-  }
-  catch (error) {
-    console.log("error connecting sql", error)
-  }finally{
-    await client.end();
-  }
+  // }
+  // catch (error) {
+  //   console.log("error connecting sql", error)
+  // }finally{
+  //   await client.end();
+  // }
 
   
-  return NextResponse.json({ result: "Error occured while adding event" }, { status: 200 });
+  // return NextResponse.json({ result: "Error occured while adding event" }, { status: 200 });
 }

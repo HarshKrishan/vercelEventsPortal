@@ -1,14 +1,13 @@
 "use client";
 import Image from "next/image";
 import React, { useEffect } from "react";
-
 import { useState } from "react";
 const ShowEvent = ({ visible, handleCLick, data }) => {
   // bg-black  bg-opacity-20 backdrop-blur-sm
   const [images, setImages] = useState([]);
 
   const [uploadedImages, setUploadedImages] = useState([]);
-
+  
   const handleSubmit = () => {
     const formdata = new FormData();
     for (let i = 0; i < images.length; i++) {
@@ -17,7 +16,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     formdata.append("eventId", data.eventId);
     console.log("data_id", data.eventId);
     formdata.append("eventName", data.name);
-    fetch("https://iiit-events-portal.vercel.app/api/addEventImages", {
+    fetch("http://localhost:3000/api/addEventImages", {
       method: "POST",
       body: formdata,
     })
@@ -31,7 +30,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     const formdata = new FormData();
     formdata.append("eventId", data.eventId);
 
-    fetch("https://iiit-events-portal.vercel.app/api/deleteEvent", {
+    fetch("http://localhost:3000/api/deleteEvent", {
       method: "POST",
       body: formdata,
     })
@@ -61,50 +60,68 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     //for vercel
 
     if (visible) {
-      // fetch("https://iiit-events-portal.vercel.app/api/getEventImages", {
-      //   method: "POST",
-      //   body: JSON.stringify({
-      //     eventId: data.eventId,
-      //   }),
-      //   headers: {
-      //     "Content-type": "application/json; charset=UTF-8",
-      //   },
-      // })
-      //   .then(async (response) => await response.json())
-      //   .then((json) => {
-      //     console.log(json);
-      //     setUploadedImages(json);
-      //   });
-      fetch("https://iiit-events-portal.vercel.app/api/getEventImages", {
+      const sentdata = {
+        eventId: 1,
+        eventName: data.name,
+      }
+      // for local
+      fetch("http://localhost:3000/api/getEventImages", {
         method: "POST",
-        body: JSON.stringify({
-          eventId: data.eventId,
-        }),
+        body: JSON.stringify(sentdata),
         headers: {
-          "Content-Type": "application/json; charset=UTF-8",
+          "Content-type": "application/json; charset=UTF-8",
         },
       })
         .then((response) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          return response.json();
+          return response.json(); 
         })
-        .then((json) => {
-          console.log(json);
-          setUploadedImages(json);
+        .then((jsonData) => {
+          console.log(jsonData);
+          setUploadedImages(jsonData.result);
         })
         .catch((error) => {
-          console.error("Fetch error:", error);
+          console.error("Error:", error);
         });
-    }
-  }, [visible]);
 
-  if (!visible) return null;
+      //for vercel
+    //   fetch("https://iiit-events-portal.vercel.app/api/getEventImages", {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       eventId: data.eventId,
+    //     }),
+    //     headers: {
+    //       "Content-Type": "application/json; charset=UTF-8",
+    //     },
+    //   })
+    //     .then((response) => {
+    //       if (!response.ok) {
+    //         throw new Error(`HTTP error! Status: ${response.status}`);
+    //       }
+    //       return response.json();
+    //     })
+    //     .then((json) => {
+    //       console.log(json);
+    //       setUploadedImages(json);
+    //     })
+    //     .catch((error) => {
+    //       console.error("Fetch error:", error);
+    //     });
+    
+  } }
+  , [uploadedImages, visible]);
+
+  if (!visible){
+    // setUploadedImages([]);
+    return null;
+  }
 
   console.log("uploadedImages", uploadedImages);
+  // const imagesToShow = uploadedImages;
   return (
-    <div className="fixed inset-x-72 inset-y-5 bg-slate-200">
+    <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-y-auto">
       <div className=" flex justify-center items-center">
         <div className=" w-4/5 flex-col items-center">
           <div className="flex justify-between">
@@ -156,11 +173,26 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
                 Event Link: <span className="font-normal">{data.link}</span>
               </li>
             </ul>
-            <div className="flex gap-x-2 items-center mt-5">
+            <div className="mt-5">
               <h1 className=" font-bold text-xl">Event Images</h1>
-
+              <label
+                htmlFor="uploadFile"
+                className="mt-3 rounded-md w-3/5 cursor-pointer"
+              >
+                {" "}
+                <span>
+                  <Image
+                    src="https://img.icons8.com/color/48/add-image.png"
+                    height={25}
+                    width={30}
+                    alt="add"
+                    className="inline-block mr-3"
+                  />
+                </span>
+                Upload Images
+              </label>
               <input
-                className="m-2 rounded-md p-1 w-3/5"
+                className="m-2 rounded-md p-1 w-3/5 hidden"
                 type="file"
                 id="uploadFile"
                 placeholder="Event Image"
@@ -172,9 +204,27 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
               />
             </div>
           </div>
+          <div className="flex flex-nowrap">
+          {uploadedImages.map((image,index) => (
+
+            <div className="m-2" key={image+index}>
+              <Image
+                src={`/uploads/${data.name}/${image}`}
+                height={200}
+                width={200}
+                alt="event image"
+              />
+            </div>
+
+          ))
+
+            
+          }
+
+          </div>
           <div className="flex justify-center items-center mt-5">
             <button
-              className="bg-red-400 rounded-md p-2 hover:bg-red-500"
+              className="bg-red-400 rounded-md p-2 hover:bg-red-500 mb-4"
               onClick={() => {
                 handleDelete();
               }}

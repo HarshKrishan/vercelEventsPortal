@@ -46,25 +46,25 @@ function Page() {
 
   useEffect(() => {
     //for local
-    // fetch('http://localhost:3000/api/getAllUsers')
-    // .then(res => res.json())
-    //     .then(json =>
+    fetch('http://localhost:3000/api/getAllUsers')
+    .then(res => res.json())
+        .then(json =>
 
-    //       // console.log(json),
-    //       setData(json.result)
-    //     )
+          // console.log(json),
+          setData(json.result)
+        )
 
     //for vercel
-    fetch("https://iiit-events-portal.vercel.app/api/getAllUsers", {
-      cache: "no-cache",
-      next: { revalidate: 0 },
-      cache:"no-store",
-    })
-      .then((res) => res.json())
-      .then((json) =>
-        // console.log(json),
-        setData(json.result)
-      );
+    // fetch("https://iiit-events-portal.vercel.app/api/getAllUsers", {
+    //   cache: "no-cache",
+    //   next: { revalidate: 0 },
+    //   cache:"no-store",
+    // })
+    //   .then((res) => res.json())
+    //   .then((json) =>
+    //     // console.log(json),
+    //     setData(json.result)
+    //   );
   }, [visible]);
 
   // if (!session) {
@@ -87,41 +87,43 @@ function Page() {
               Add User
             </button>
           </div>
-          <div className="mt-20 w-full flex justify-center overflow-y-scroll h-72 ">
-            <table className="table-auto border-4 border-slate-300 w-full">
-              <thead>
-                <tr>
-                  <th className="border-4 border-slate-300">S NO.</th>
-                  <th className="border-4 border-slate-300">Name</th>
-                  <th className="border-4 border-slate-300">Role</th>
-                  <th className="border-4 border-slate-300">Email</th>
-                  <th className="border-4 border-slate-300">Status</th>
-                  <th className="border-4 border-slate-300 w-20">Modify</th>
-                </tr>
-              </thead>
-              <tbody className="">
-                {data.map((user, index) => (
-                  <UserTableRow
-                    key={index + 1}
-                    id={index + 1}
-                    //for local sql
-                    // name={user.fName}
-                    // lname={user.lName}
-                    // role={user.role}
-                    // email={user.emailId}
-                    // status={user.status}
+          <div className="h-[28rem] overflow-y-auto  mt-20">
+            <div className="w-full flex justify-center h-100dvh">
+              <table className="table-auto border-4 border-slate-300 w-full">
+                <thead className="sticky top-0 z-10  ">
+                  <tr>
+                    <th className="border-4 border-slate-300 ">S NO.</th>
+                    <th className="border-4 border-slate-300 ">Name</th>
+                    <th className="border-4 border-slate-300 ">Role</th>
+                    <th className="border-4 border-slate-300 ">Email</th>
+                    <th className="border-4 border-slate-300 ">Status</th>
+                    <th className="border-4 border-slate-300 w-20 ">Modify</th>
+                  </tr>
+                </thead>
+                <tbody className="">
+                  {data.map((user, index) => (
+                    <UserTableRow
+                      key={index + 1}
+                      id={index + 1}
+                      //for local sql
+                      name={user.fName}
+                      lname={user.lName}
+                      role={user.role}
+                      email={user.emailId}
+                      status={user.status}
 
-                    //for vercel sql
-                    name={user.fname}
-                    lname={user.lname}
-                    role={user.role}
-                    email={user.emailid}
-                    status={user.status}
-                    markUpdateUserVisibleTrue={markUpdateUserVisibleTrue}
-                  />
-                ))}
-              </tbody>
-            </table>
+                      //for vercel sql
+                      // name={user.fname}
+                      // lname={user.lname}
+                      // role={user.role}
+                      // email={user.emailid}
+                      // status={user.status}
+                      markUpdateUserVisibleTrue={markUpdateUserVisibleTrue}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <AddUser visible={visible} handleCLick={handleCLick} />

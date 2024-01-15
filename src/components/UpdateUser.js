@@ -57,7 +57,9 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
       alert("Please fill all the fields");
       return;
     }
-    fetch("https://iiit-events-portal.vercel.app/api/updateUser", {
+
+    //for local
+    fetch("http://localhost:3000/api/updateUser", {
       method: "POST",
       body: JSON.stringify(data),
       headers: {
@@ -75,17 +77,15 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         handleCLick();
       })
       .then((json) => console.log(json));
-  };
 
-  const handleDelete = () => {
-    const formdata = new FormData();
 
-    formdata.append("email", email);
-    //for local
-    // fetch("http://localhost:3000/api/deleteUser", {
+    //for vercel
+    // fetch("https://iiit-events-portal.vercel.app/api/updateUser", {
     //   method: "POST",
-    //   body: formdata,
-      
+    //   body: JSON.stringify(data),
+    //   headers: {
+    //     "Content-type": "application/json; charset=UTF-8",
+    //   },
     // })
     //   .then((response) => {
     //     console.log(response);
@@ -98,10 +98,14 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
     //     handleCLick();
     //   })
     //   .then((json) => console.log(json));
+  };
 
-    //for vercel
+  const handleDelete = () => {
+    const formdata = new FormData();
 
-    fetch("https://iiit-events-portal.vercel.app/api/deleteUser", {
+    formdata.append("email", email);
+    //for local
+    fetch("http://localhost:3000/api/deleteUser", {
       method: "POST",
       body: formdata,
       
@@ -117,6 +121,25 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         handleCLick();
       })
       .then((json) => console.log(json));
+
+    //for vercel
+
+    // fetch("https://iiit-events-portal.vercel.app/api/deleteUser", {
+    //   method: "POST",
+    //   body: formdata,
+      
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //     setFirstName("");
+    //     setLastName("");
+    //     setPassword("");
+    //     setEmail("");
+    //     setStatus("active");
+    //     setRole("admin");
+    //     handleCLick();
+    //   })
+    //   .then((json) => console.log(json));
   };
   
   return (

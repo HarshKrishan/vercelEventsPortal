@@ -34,23 +34,25 @@ const AddEvent = ({ visible, handleCLick }) => {
       formdata.append("image[]", event.image[i]);
     }
     //for local
-    // fetch("http://localhost:3000/api/addEvent", {
-    //   method: "POST",
-    //   body: formdata,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .then((json) => console.log(json)); 
-    //for vercel
-    fetch("https://iiit-events-portal.vercel.app/api/addEvent", {
+    fetch("http://localhost:3000/api/addEvent", {
       method: "POST",
       body: formdata,
     })
       .then((response) => {
         console.log(response);
       })
-      .then((json) => console.log(json));
+      .then((json) => console.log(json)); 
+
+
+    //for vercel
+    // fetch("https://iiit-events-portal.vercel.app/api/addEvent", {
+    //   method: "POST",
+    //   body: formdata,
+    // })
+    //   .then((response) => {
+    //     console.log(response);
+    //   })
+    //   .then((json) => console.log(json));
         
     
     setEvent({
@@ -111,7 +113,7 @@ const AddEvent = ({ visible, handleCLick }) => {
               />
               <label className="text-black w-3/5">Event Description</label>
 
-              <input
+              <textarea
                 className="m-2 rounded-md p-1 w-3/5"
                 type="text"
                 placeholder="Event Description"

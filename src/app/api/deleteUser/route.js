@@ -14,35 +14,39 @@ export async function POST(req) {
 
 
   // for local sql
-  // connectSql();
-  // const query = `DELETE FROM users WHERE emailId = '${email}';`;
+  connectSql();
+  const query = `DELETE FROM users WHERE emailId = '${email}';`;
 
-  // const res = await connection
-  //   .promise()
-  //   .query(query)
-  //   .then(([data, fields]) => {
-  //     // console.log(data);
-  //     return data;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
+  const res = await connection
+    .promise()
+    .query(query)
+    .then(([data, fields]) => {
+      // console.log(data);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return NextResponse.json(
+        { result: "Error deleting user..." },
+        { status: 500 }
+      );
+    });
 
-
+  return NextResponse.json({ result: res }, { status: 200 });
   //for vercel sql
-  const client = createClient();
-  await client.connect();
+  // const client = createClient();
+  // await client.connect();
 
-  try {
-    const { res, fields } =
-      await client.sql`DELETE FROM users WHERE emailid = ${email};`;
+  // try {
+  //   const { res, fields } =
+  //     await client.sql`DELETE FROM users WHERE emailid = ${email};`;
 
-    return NextResponse.json({ result: res }, { status: 200 });
-  } catch (e) {
-    console.log(e);
-  } finally {
-    await client.end();
-  }
+  //   return NextResponse.json({ result: res }, { status: 200 });
+  // } catch (e) {
+  //   console.log(e);
+  // } finally {
+  //   await client.end();
+  // }
 
-  return NextResponse.json({ result: "Error deleting user..." }, { status: 200 });
+  // return NextResponse.json({ result: "Error deleting user..." }, { status: 200 });
 }

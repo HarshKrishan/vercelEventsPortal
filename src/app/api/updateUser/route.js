@@ -24,39 +24,43 @@ export async function POST(req) {
 
 
   //for local sql
-  // connectSql();
-  // const query = `update users set fName='${firstName}',lName = '${lastName}', pwd='${password}',role= '${role}',status='${status}' where emailId='${email}'`;
-  // const res = await connection
-  //   .promise()
-  //   .query(query)
-  //   .then(([data, fields]) => {
-  //     // console.log(data);
-  //     return data;
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  //   revalidatePath("manaegeUsers")
-  // return NextResponse.json({ result: res }, { status: 200 });
+  connectSql();
+  const query = `update users set fName='${firstName}',lName = '${lastName}', pwd='${password}',role= '${role}',status='${status}' where emailId='${email}'`;
+  const res = await connection
+    .promise()
+    .query(query)
+    .then(([data, fields]) => {
+      // console.log(data);
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+      return NextResponse.json(
+        { result: "Error updating User..." },
+        { status: 500 }
+      );
+    });
+    // revalidatePath("/manageUsers")
+  return NextResponse.json({ result: res }, { status: 200 });
 
 
 
   //for vercel sql
 
-  const client = createClient();
-  await client.connect();
+  // const client = createClient();
+  // await client.connect();
 
-  try {
-    const { res, fields } =
-      await client.sql`update users set fname=${firstName},lname = ${lastName}, pwd=${password},role= ${role},status=${status} where emailid=${email}`;
+  // try {
+  //   const { res, fields } =
+  //     await client.sql`update users set fname=${firstName},lname = ${lastName}, pwd=${password},role= ${role},status=${status} where emailid=${email}`;
 
-    return NextResponse.json({ result: res }, { status: 200 });
-  } catch (e) {
-    console.log("error updating user", e);
-  } finally {
-    await client.end();
-  }
-  revalidatePath("https://iiit-events-portal.vercel.app/manageUsers");
-  return NextResponse.json({ result: "Error updating User..." }, { status: 500 });
+  //   return NextResponse.json({ result: res }, { status: 200 });
+  // } catch (e) {
+  //   console.log("error updating user", e);
+  // } finally {
+  //   await client.end();
+  // }
+  // revalidatePath("https://iiit-events-portal.vercel.app/manageUsers");
+  // return NextResponse.json({ result: "Error updating User..." }, { status: 500 });
 
 }
