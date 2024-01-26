@@ -1,8 +1,7 @@
 import connectSql,{connection} from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
-
-import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -10,7 +9,10 @@ export const cache = "no-store";
 export async function GET(req) {
     // console.log("entering getAllUsers route");
 
-
+    const session = await getServerSession();
+    if (!session) {
+      return;
+    }
     //for local sql
     connectSql();
    

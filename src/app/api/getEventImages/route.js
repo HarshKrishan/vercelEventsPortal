@@ -2,6 +2,7 @@ import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
+import { getServerSession } from "next-auth";
 import fs from "fs";
 import path from "path";
 export const dynamic = "force-dynamic";
@@ -10,7 +11,10 @@ export const cache = "no-store";
 
 export async function POST(req) {
     // console.log("entering getAllEvents route");
-
+    const session = await getServerSession();
+    if (!session) {
+      return;
+    }
     const request = await req.json();
     // console.log("request",request);
     const {eventId} = request;

@@ -22,7 +22,7 @@ const AddUser = ({ visible, handleCLick }) => {
       email: email,
       status: status,
     };
-    console.log(data);
+    // console.log(data);
     if (
       firstName === "" ||
       lastName === "" ||

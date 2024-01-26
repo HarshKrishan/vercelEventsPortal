@@ -1,6 +1,6 @@
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
-
+import { getServerSession } from "next-auth";
 import { writeFile,mkdir } from "fs/promises";
 import { createClient } from "@vercel/postgres";
 import { revalidatePath } from "next/cache";
@@ -11,12 +11,19 @@ export const cache = "no-store";
 export async function POST(req, res) {
   // console.log("Entering addEvent route");
 
+  const session = await getServerSession({ req });
+
+  if (!session) {
+    return;
+  }
+
+
   const data = await req.formData();
   // console.log("data", data);
 
   const images = data.getAll("image[]");
 
-  //   console.log("images", images);
+    // console.log("images", images);
 
   //for local sql
   connectSql();
@@ -29,7 +36,9 @@ export async function POST(req, res) {
     const currtime = new Date().getTime();
     const eventName = data.get("eventName");
     await mkdir(`./public/uploads/${eventName}`, { recursive: true });
-    const path = `./public/uploads/${eventName}/${currtime+".jpg"}`;
+    const extension = image.type.split("/")[1];
+    console.log("extension",extension)
+    const path = `./public/uploads/${eventName}/${currtime+"."+extension}`;
 
     // Write the file
     await writeFile(path, buffer);

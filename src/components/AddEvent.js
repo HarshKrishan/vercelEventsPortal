@@ -1,26 +1,45 @@
 "use client";
 import { useRouter } from 'next/navigation';
-import React from 'react'
+import React, { use, useEffect } from 'react'
 import { useState } from 'react'
+import CustomInput from './CustomInput';
 
-const AddEvent = ({ visible, handleCLick }) => {
+const AddEvent = ({ visible, handleCLick}) => {
   const router = useRouter();
+  const [speakers, setSpeakers] = useState([]);
 
+
+  const addSpeaker = (title, affiliation) => {
+    setSpeakers([...speakers, { title, affiliation }]);
+  };
+
+  function handleDelete(index) {
+    // console.log("index",index)
+    const newSpeakers = speakers.filter((speaker, i) => i !== index);
+    setSpeakers(newSpeakers);
+  }
+  
   const [event, setEvent] = useState({
     name: "",
     date: "",
     time: "",
     description: "",
+    speakers: "",
+    numParticipants: 0,
     organiser: "",
     link: "",
-    image: [],
     fundedBy: "",
     fund:"",
   });
   if (!visible) return null;
   const handleSubmit = async () => {
     // e.preventDefault();
-    console.log("event",event);
+    // console.log("event",event);
+
+    const answer = window.confirm("Are you sure you want to add this event?");
+    if (!answer) return;
+
+
     const formdata = new FormData();
     formdata.append("name", event.name);
     formdata.append("date", event.date);
@@ -30,9 +49,9 @@ const AddEvent = ({ visible, handleCLick }) => {
     formdata.append("link", event.link);
     formdata.append("fundedBy", event.fundedBy);
     formdata.append("fund", event.fund);
-    for (let i = 0; i < event.image.length; i++) {
-      formdata.append("image[]", event.image[i]);
-    }
+    formdata.append("numParticipants", event.numParticipants);
+    formdata.append("speakers", JSON.stringify(speakers));
+    
     //for local
     fetch("http://localhost:3000/api/addEvent", {
       method: "POST",
@@ -40,6 +59,7 @@ const AddEvent = ({ visible, handleCLick }) => {
     })
       .then((response) => {
         console.log(response);
+        handleCLick();
       })
       .then((json) => console.log(json)); 
 
@@ -60,15 +80,19 @@ const AddEvent = ({ visible, handleCLick }) => {
       date: "",
       time: "",
       description: "",
+      numParticipants: 0,
       organiser: "",
       link: "",
-      image: [],
       fundedBy: "",
       fund:"",
     });
-     router.refresh();
-    await handleCLick();
+
+    setSpeakers([]);
+    //  router.refresh();
+
   }
+
+  
   // bg-black  bg-opacity-20 backdrop-blur-sm
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-auto">
@@ -122,6 +146,29 @@ const AddEvent = ({ visible, handleCLick }) => {
                   setEvent({ ...event, description: e.target.value });
                 }}
               />
+              
+
+              <CustomInput
+                speakers={speakers}
+                addSpeaker={addSpeaker}
+                handleDelete={handleDelete}
+                className="w-3/5"
+              />
+              <label className="text-black w-3/5">No. of Participants </label>
+
+              <input
+                className="m-2 rounded-md p-1 w-3/5"
+                type="Number"
+                placeholder="10"
+                value={event.numParticipants}
+                onChange={(e) => {
+                  if(e.target.value<0) setEvent({ ...event, numsParticipants: 0 });
+                  else{
+                    setEvent({ ...event, numsParticipants: e.target.value });
+                  }
+                  
+                }}
+              />
               <label className="text-black w-3/5">Event Organiser</label>
 
               <input
@@ -132,7 +179,6 @@ const AddEvent = ({ visible, handleCLick }) => {
                 onChange={(e) => {
                   setEvent({ ...event, organiser: e.target.value });
                 }}
-
               />
               <label className="text-black w-3/5">Event Link</label>
 
@@ -144,7 +190,6 @@ const AddEvent = ({ visible, handleCLick }) => {
                 onChange={(e) => {
                   setEvent({ ...event, link: e.target.value });
                 }}
-
               />
 
               <label className="text-black w-3/5">Event Funded By</label>
@@ -157,7 +202,6 @@ const AddEvent = ({ visible, handleCLick }) => {
                 onChange={(e) => {
                   setEvent({ ...event, fundedBy: e.target.value });
                 }}
-
               />
 
               <label className="text-black w-3/5">Event Fund</label>
@@ -170,21 +214,10 @@ const AddEvent = ({ visible, handleCLick }) => {
                 onChange={(e) => {
                   setEvent({ ...event, fund: e.target.value });
                 }}
+              />
+
               
-              />
-
-              <label className="text-black w-3/5">Event Image</label>
-
-              <input
-                className="m-2 rounded-md p-1 w-3/5"
-                type="file"
-                placeholder="Event Image"
-                multiple={true}
-                onChange={(e) => {
-                  setEvent({ ...event, image: e.target.files });
-                }}
-              />
-              <div className='flex justify-between w-3/5 mb-5'>
+              <div className="flex justify-between w-3/5 mb-5">
                 <button
                   className="text-black bg-teal-400 rounded-md p-1 w-1/3 hover:bg-teal-500"
                   onClick={() => {
@@ -194,25 +227,25 @@ const AddEvent = ({ visible, handleCLick }) => {
                 >
                   Add Event
                 </button>
-                <button 
-                className="text-black bg-teal-400 rounded-md p-1 w-1/3 hover:bg-teal-500"
-                onClick={() => {
-                  setEvent({
-                    name: "",
-                    date: "",
-                    time: "",
-                    description: "",
-                    organiser: "",
-                    link: "",
-                    image: [],
-                    fundedBy: "",
-                    fund: "",
-                  });
-                  handleCLick();
-                }}
-              >
-                Cancel
-              </button>
+                <button
+                  className="text-black bg-teal-400 rounded-md p-1 w-1/3 hover:bg-teal-500"
+                  onClick={() => {
+                    setEvent({
+                      name: "",
+                      date: "",
+                      time: "",
+                      description: "",
+                      organiser: "",
+                      link: "",
+                      fundedBy: "",
+                      fund: "",
+                    });
+                    setSpeakers([]);
+                    handleCLick();
+                  }}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

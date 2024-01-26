@@ -4,7 +4,7 @@ import TopNavbar from "@/components/Navbar";
 import React, { useState, useEffect } from "react";
 import EventTableRow from "@/components/EventTableRow";
 import ShowEvent from "@/components/ShowEvent";
-
+import DateRangePicker from "@wojtekmaj/react-daterange-picker";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -14,6 +14,9 @@ export const cache = "no-store";
 function Page() {
   const [visible, setVisible] = useState(false);
 
+  
+  const [showDateRange, setShowDateRange] = useState(false);
+  const [value, setValue] = useState([new Date(), new Date()]);
 
   const [visibleShowEvent, setVisibleShowEvent] = useState(false);
 
@@ -68,7 +71,29 @@ function Page() {
 
   // console.log("events",events);
 
+  function handleDownloadButton(){
+    let dataObjToWrite = events
+    let filename = "events.json"
+    const saveTemplateAsFile = (filename, dataObjToWrite) => {
+    const blob = new Blob([JSON.stringify(dataObjToWrite)], { type: "text/json" });
+    const link = document.createElement("a");
 
+    link.download = filename;
+    link.href = window.URL.createObjectURL(blob);
+    link.dataset.downloadurl = ["text/json", link.download, link.href].join(":");
+
+    const evt = new MouseEvent("click", {
+        view: window,
+        bubbles: true,
+        cancelable: true,
+    });
+
+    
+    link.dispatchEvent(evt);
+    link.remove()
+};
+    saveTemplateAsFile(filename,dataObjToWrite)
+  }
   return (
     <div>
       <TopNavbar>
@@ -161,9 +186,17 @@ function Page() {
                 </tbody>
               </table>
             </div>
+            <div className="flex items-end mt-5 flex-col w-full">
+              <button className="text-black bg-teal-400 rounded-md p-1 w-1/7 hover:bg-teal-500" onClick={()=>{
+                setShowDateRange(!showDateRange)
+              }}>Download Data!</button>
+
+              {showDateRange && <DateRangePicker onChange={setValue} value={value} className="" />}
+            </div>
           </div>
         </div>
         <AddEvent visible={visible} handleCLick={handleCLick} />
+
         <ShowEvent
           visible={visibleShowEvent}
           handleCLick={handleCLickShowEvent}

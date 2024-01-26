@@ -10,8 +10,21 @@ export default function Form(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const router = useRouter();
+    const [error, setError] = useState("");
 
+    const isValidEmail = (email) => {
+      const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+      return regex.test(email);
+    };
     const handleLogin = async () => {
+      if (!isValidEmail(email)) {
+        alert("Invalid Email");
+        return;
+      }
+
+
+
+
       const response = await signIn("credentials", {
         email: email,
         password: password,
@@ -77,7 +90,7 @@ export default function Form(){
               </button>
             </div>
             <div className="w-3/5 flex justify-center">
-              <button className="text-teal-400">Forgot Password?</button>
+              <Link className="text-teal-400" href="/forgotPassword">Forgot Password?</Link>
             </div>
           </div>
         </div>

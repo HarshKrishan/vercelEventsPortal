@@ -2,13 +2,18 @@ import { revalidatePath } from "next/cache";
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
-
+import { getServerSession } from "next-auth";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const cache = "no-store";
 
 export async function POST(req) {
-  console.log("Entering deleteEvent route");
+  // console.log("Entering deleteEvent route");
+
+  const session = await getServerSession();
+  if (!session) {
+    return;
+  }
 
   const data = await req.formData();
   //   console.log("data", data);

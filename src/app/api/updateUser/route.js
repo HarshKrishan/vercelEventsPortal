@@ -2,12 +2,17 @@ import { revalidatePath } from "next/cache";
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
-
+import { getServerSession } from "next-auth";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const cache = "no-store";
 export async function POST(req) {
   console.log("entering addUser route");
+
+  const session = await getServerSession({ req });
+  if (!session) {
+    return;
+  }
   // console.log(req);
   const { firstName, lastName, password, role, email, status } =
     await req.json();

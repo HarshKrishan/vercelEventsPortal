@@ -2,6 +2,9 @@
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useState } from "react";
+
+
+
 const ShowEvent = ({ visible, handleCLick, data }) => {
   // bg-black  bg-opacity-20 backdrop-blur-sm
   const [images, setImages] = useState([]);
@@ -118,6 +121,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     return null;
   }
 
+  
   console.log("uploadedImages", uploadedImages);
   // const imagesToShow = uploadedImages;
   return (
@@ -205,22 +209,54 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
             </div>
           </div>
           <div className="flex flex-nowrap">
-          {uploadedImages.map((image,index) => (
-
-            <div className="m-2" key={image+index}>
-              <Image
+            {uploadedImages.map((image, index) => (
+              <div className="m-2" key={image + index}>
+                {/* <Image
                 src={`/uploads/${data.name}/${image}`}
                 height={200}
                 width={200}
                 alt="event image"
-              />
-            </div>
+              /> */}
+                <a
+                  
+                  href={`/uploads/${data.name}/${image}`}
+                  target="_blank"
+                >
 
-          ))
+                  {
+                    image.split(".")[1] === "pdf" ? 
+                    <Image
+                    src="/pdf.png"
+                    height={150}
+                    width={150}
+                    alt="event pdf"
+                    className="object-fit hover:cursor-pointer hover:opacity-50"
+                  />
+                  :
+                  <Image
+                  src={`/uploads/${data.name}/${image}`}
+                  height={200}
+                  width={200}
+                  alt="event image"
+                  className="object-fit hover:cursor-pointer hover:opacity-50"
+                />
 
-            
-          }
-
+                  }
+                  {/* <object
+                    data={`/uploads/${data.name}/${image}`}
+                    width="200px"
+                    height="200px"
+                    className="object-fit hover:cursor-pointer hover:opacity-50"
+                    frameBorder="0"
+                    onhover="cursor:pointer opacity-50"
+                    onClick={(event) => {
+                      event.preventDefault();
+                      window.open(`/uploads/${data.name}/${image}`, "_blank");
+                    }}
+                  ></object> */}
+                </a>
+              </div>
+            ))}
           </div>
           <div className="flex justify-center items-center mt-5">
             <button

@@ -2,9 +2,39 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import ReactPaginate from "react-paginate";
 export default function Home(){
     const [events, setEvents] = useState([]);
+    const [selected,setSelected]=useState("upcoming");
+
+    const [upcomingEvents, setUpcomingEvents] = useState([]);
+    const [recentEvents, setRecentEvents] = useState([]);
+
+    const handleButtonClick = (buttonType) => {
+      setSelected(buttonType);
+    };
+
+    function separateEvents(Events) {
+      if(upcomingEvents.length>0 || recentEvents.length>0){
+        return;
+      }
+      let upcoming = [];
+      let recent = [];
+      let today = new Date();
+      
+      for (let i = 0; i < Events.length; i++) {
+        let eventDate = new Date(Events[i].eDate);
+
+        
+        if (eventDate > today) {
+          upcoming.push(Events[i]);
+        } else {
+          recent.push(Events[i]);
+        }
+      }
+      setUpcomingEvents(upcoming);
+      setRecentEvents(recent);
+    }
 
     useEffect(() => {
       //for local
@@ -12,9 +42,12 @@ export default function Home(){
         .then((res) => res.json())
         .then((json) => {
           setEvents(json.result);
+          separateEvents(json.result);
         });
 
+      
 
+      
       //for vercel
       // fetch("https://iiit-events-portal.vercel.app/api/getAllEvents", {
       //   cache: "no-cache",
@@ -43,6 +76,32 @@ export default function Home(){
       return formattedDate;
     };
 
+    const eventsPerPage = 8;
+    const [upComingEventOffset, setUpComingEventOffset] = useState(0);
+    const upComingEventEndOffset = upComingEventOffset + eventsPerPage;
+    const currentUpComingEvents = upcomingEvents.slice(upComingEventOffset, upComingEventEndOffset);
+    const upComingEventPageCount = Math.ceil(upcomingEvents.length / eventsPerPage);
+
+    const handleUpComingEventsPageClick = (event) => {
+      const newOffset = (event.selected * eventsPerPage) % upcomingEvents.length;
+      setUpComingEventOffset(newOffset);
+    };
+    
+
+    const [recentEventOffset, setRecentEventOffset] = useState(0);
+    const recentEventEndOffset = recentEventOffset + eventsPerPage;
+    const currentRecentEvents = recentEvents.slice(
+      recentEventOffset,
+      recentEventEndOffset
+    );
+    const recentEventPageCount = Math.ceil(
+      recentEvents.length / eventsPerPage
+    );
+
+    const handleRecentEventsPageClick = (event) => {
+      const newOffset = (event.selected * eventsPerPage) % recentEvents.length;
+      setRecentEventOffset(newOffset);
+    };
 
     return (
       <div className="w-screen">
@@ -62,77 +121,149 @@ export default function Home(){
             </button>
           </Link>
         </div>
-        <div className="absolute top-10 mt-20 ml-[450px]">
+        <div className="absolute top-8 mt-20 ml-[50px] md:ml-[450px]">
           <h1 className="text-black text-5xl font-semibold">
-            Upcoming and Recents Events
+            Welcome to IIITD Events Portal
           </h1>
+
+          <div className="flex justify-center mt-3">
+            <div className="border-gray-400 border-2 rounded-xl w-full flex justify-center">
+              <button
+                className={` px-3 py-2 flex-1 ${
+                  selected === "upcoming" ? "bg-teal-300 rounded-xl" : ""
+                }`}
+                onClick={() => handleButtonClick("upcoming")}
+              >
+                Upcoming Events
+              </button>
+              <button
+                className={`px-3 py-2 rounded-xl flex-1 ${
+                  selected === "recent" ? "bg-teal-300 rounded-xl" : ""
+                }`}
+                onClick={() => handleButtonClick("recent")}
+              >
+                Recent Events
+              </button>
+            </div>
+          </div>
         </div>
-        {/* <div className="flex bg-white justify-center items-center absolute z-10 top-1/3 left-1/4 m-15 w-1/2 bg-opacity-60 rounded-lg">
-          <div className="  flex flex-col rounded-xl w-full items-center ">
-            <table className="table-auto border-4 border-slate-300 w-full overflow-auto">
-              <thead>
-                <tr>
-                  <th className="border-4 border-black">S NO.</th>
-                  <th className="border-4 border-black">Event Name</th>
-                  <th className="border-4 border-black">Date</th>
-                  <th className="border-4 border-black">Event Organiser</th>
-                  <th className="border-4 border-black">View</th>
-                </tr>
-              </thead>
-              <tbody>
-                {events.map((event, index) => (
-                  <tr key={index + 1}>
-                    <td className="border-4 border-black text-center">
-                      {index + 1}
-                    </td>
-                    <td className="border-4 border-black text-center">
-                      {event.eName}
-                    </td>
-                    <td className="border-4 border-black text-center">
-                      {getDate(event.eDate)}
-                    </td>
-                    <td className="border-4 border-black text-center">
-                      {event.eOrgEmail}
-                    </td>
-                    <td className="border-4 border-black text-center">
-                      <div className="flex justify-center hover:cursor-pointer">
+
+        <div className="absolute z-10 top-1/3 w-full mt-10">
+          <div className="flex flex-wrap justify-center  w-full">
+            {selected === "upcoming" ? (
+              currentUpComingEvents.length == 0 ? (
+                <>
+                  <div className="flex flex-col justify-center items-center  h-1/2">
+                    <h1 className="text-2xl font-semibold">
+                      No Upcoming Events
+                    </h1>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-col items-center">
+                  <div className="flex w-4/5 gap-4 flex-wrap items-center">
+                {
+                currentUpComingEvents.map((event, index) => (
+                  
+                    <div
+                      key={index + 1}
+                      className="flex flex-col justify-center items-center m-2 w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5"
+                    >
+                      <div className="flex justify-center items-center  h-1/2 ">
                         <Image
-                          src="/view.png"
-                          height={25}
-                          width={30}
-                          alt="view"
+                          src="/event.png"
+                          width={150}
+                          height={150}
+                          alt="event"
                         />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div> */}
+                      <div className="flex flex-col justify-center items-center  h-1/2">
+                        <h1 className="text-2xl font-semibold">
+                          {event.eName}
+                        </h1>
+                        <h1 className="text-xl">{getDate(event.eDate)}</h1>
+                        <h1 className="text-xl">{event.eOrgEmail}</h1>
+                      </div>
+                    </div>
 
-        <div className="absolute z-10 top-1/3 w-full">
-          <div className="flex flex-wrap justify-center  w-full">
-            {events.map((event, index) => (
-              <div
-                key={index + 1}
-                className="flex flex-col justify-center items-center m-2 w-96 h-96 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5"
-              >
-                <div className="flex justify-center items-center  h-1/2">
-                  <Image
-                    src="/event.png"
-                    width={150}
-                    height={150}
-                    alt="event"
-                  />
+                    
+                  
+                ))
+                }
                 </div>
+                <ReactPaginate
+                      breakLabel="..."
+                      nextLabel="next >"
+                      onPageChange={handleUpComingEventsPageClick}
+                      pageRangeDisplayed={5}
+                      pageCount={upComingEventPageCount}
+                      previousLabel="< previous"
+                      renderOnZeroPageCount={null}
+                      containerClassName="flex flex-row justify-center my-10"
+                      pageClassName="mx-2"
+                      activeClassName="bg-blue-400 text-white"
+                      activeLinkClassName="bg-blue-400 text-white px-3 py-2 rounded-md"
+                      disabledClassName="text-gray-400"
+                      nextClassName="mx-2"
+                      previousClassName="mx-2"
+                    />
+
+                    </div>
+              )
+            ) : currentRecentEvents.length == 0 ? (
+              <>
                 <div className="flex flex-col justify-center items-center  h-1/2">
-                  <h1 className="text-2xl font-semibold">{event.eName}</h1>
-                  <h1 className="text-xl">{getDate(event.eDate)}</h1>
-                  <h1 className="text-xl">{event.eOrgEmail}</h1>
+                  <h1 className="text-2xl font-semibold">No Recent Events</h1>
                 </div>
+              </>
+            ) : (
+              <div className="flex flex-col items-center w-full">
+              <div className="flex w-full gap-4 flex-wrap items-center justify-center ">
+              {
+                
+                currentRecentEvents.map((event, index) => (
+                <div
+                  key={index + 1}
+                  className="flex flex-col justify-center items-center w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5"
+                >
+                  <div className="flex justify-center items-center  h-1/2 ">
+                    <Image
+                      src="/event.png"
+                      width={150}
+                      height={150}
+                      alt="event"
+                    />
+                  </div>
+                  <div className="flex flex-col justify-center items-center  h-1/2">
+                    <h1 className="text-2xl font-semibold">{event.eName}</h1>
+                    <h1 className="text-xl">{getDate(event.eDate)}</h1>
+                    <h1 className="text-xl">{event.eOrgEmail}</h1>
+                  </div>
+                </div>
+                ))
+                
+              }
               </div>
-            ))}
+              <ReactPaginate
+                breakLabel="..."
+                nextLabel="next >"
+                onPageChange={handleRecentEventsPageClick}
+                pageRangeDisplayed={5}
+                pageCount={recentEventPageCount}
+                previousLabel="< previous"
+                renderOnZeroPageCount={null}
+                containerClassName="flex flex-row justify-center my-10"
+                pageClassName="mx-2"
+                activeClassName="bg-blue-400 text-white"
+                activeLinkClassName="bg-blue-400 text-white px-3 py-2 rounded-md"
+                disabledClassName="text-gray-400"
+                nextClassName="mx-2"
+                previousClassName="mx-2"
+              />
+
+
+              </div>
+            )}
           </div>
         </div>
       </div>

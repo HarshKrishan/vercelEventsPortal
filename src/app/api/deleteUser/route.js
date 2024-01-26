@@ -2,9 +2,15 @@ import { revalidatePath } from "next/cache";
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { createClient } from "@vercel/postgres";
-
+import { getServerSession } from "next-auth";
 export async function POST(req) {
   console.log("Entering deleteUser route");
+
+  const session = await getServerSession();
+  if (!session) {
+    return;
+  }
+  
 
   const data = await req.formData();
   //   console.log("data", data);

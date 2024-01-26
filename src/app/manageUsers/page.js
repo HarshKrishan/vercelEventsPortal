@@ -90,7 +90,7 @@ function Page() {
           <div className="h-[28rem] overflow-y-auto  mt-20">
             <div className="w-full flex justify-center h-100dvh">
               <table className="table-auto border-4 border-slate-300 w-full">
-                <thead className="sticky top-0 z-10  ">
+                <thead className="">
                   <tr>
                     <th className="border-4 border-slate-300 ">S NO.</th>
                     <th className="border-4 border-slate-300 ">Name</th>
