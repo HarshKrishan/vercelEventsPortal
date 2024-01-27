@@ -9,10 +9,10 @@ export const revalidate = 0;
 export const cache = "no-store";
 export async function GET(req) {
     // console.log("entering getAllEvents route");
-    const session = await getServerSession();
-    if (!session) {
-        return;
-    }
+    // const session = await getServerSession();
+    // if (!session) {
+    //     return;
+    // }
     //for local sql
     connectSql();
 

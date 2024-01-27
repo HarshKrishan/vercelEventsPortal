@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React, { useEffect } from "react";
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 
 
 const ShowEvent = ({ visible, handleCLick, data }) => {
@@ -39,11 +39,33 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     })
       .then((response) => {
         console.log(response);
+        toast.success("Event deleted successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         handleCLick();
       })
-      .then((json) => console.log(json));
+      .catch((err) => {
+        console.log(err);
+        toast.error("Error deleting event", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+          progress: undefined,
+        });
+      });
 
-    handleCLick();
+    // handleCLick();
   };
 
   useEffect(() => {
@@ -122,7 +144,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
   }
 
   
-  console.log("uploadedImages", uploadedImages);
+  // console.log("uploadedImages", uploadedImages);
   // const imagesToShow = uploadedImages;
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-y-auto">

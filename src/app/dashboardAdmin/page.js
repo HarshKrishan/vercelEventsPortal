@@ -4,7 +4,8 @@ import TopNavbar from "@/components/Navbar";
 import React, { useState, useEffect } from "react";
 import EventTableRow from "@/components/EventTableRow";
 import ShowEvent from "@/components/ShowEvent";
-import DateRangePicker from "@wojtekmaj/react-daterange-picker";
+import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
+import UpdateEvent from "@/components/UpdateEvent";
 import { redirect } from "next/navigation";
 
 export const dynamic = "force-dynamic";
@@ -13,10 +14,59 @@ export const cache = "no-store";
 
 function Page() {
   const [visible, setVisible] = useState(false);
-
+  const [fetchAgain, setFetchAgain] = useState(false);
   
-  const [showDateRange, setShowDateRange] = useState(false);
-  const [value, setValue] = useState([new Date(), new Date()]);
+  const [date, setDate] = useState({
+    from: new Date(),
+    to: new Date(),
+  });
+  
+  const [submit,isSubmit] = useState({
+    first:true,
+    second:true,
+  })
+
+  useEffect(() => {
+    if(submit.first && submit.second){
+      fetch("http://localhost:3000/api/getEventByDateRange", {
+        method: "POST",
+        body: JSON.stringify(date),
+      })
+        .then((res) => res.json())
+        .then((json) => {
+          
+          setEvents(json.result);
+          
+          
+        });
+        setFetchAgain(true);
+      // console.log("now fetch data from date range",date);
+      isSubmit({first:false,second:false})
+      
+      
+
+    }
+  }, [submit,date,fetchAgain])
+  
+  useEffect(() => {
+
+    if(!fetchAgain) return;
+    console.log("now fetch data from date range");
+    fetch("http://localhost:3000/api/getEventByDateRange", {
+      method: "POST",
+      body: JSON.stringify(date),
+    })
+      .then((res) => res.json())
+      .then((json) => {
+        
+        setEvents(json.result);
+        setFetchAgain(false);
+
+        
+      });
+  },[fetchAgain,date])
+
+
 
   const [visibleShowEvent, setVisibleShowEvent] = useState(false);
 
@@ -50,7 +100,17 @@ function Page() {
   
   useEffect(() => {
     //for local
-    fetch("http://localhost:3000/api/getAllEvents")
+    // fetch("http://localhost:3000/api/getAllEvents")
+    //   .then((res) => res.json())
+    //   .then((json) => {
+    //     setEvents(json.result);
+    //   });
+
+
+    fetch("http://localhost:3000/api/getEventByDateRange", {
+      method: "POST",
+      body: JSON.stringify(date),
+    })
       .then((res) => res.json())
       .then((json) => {
         setEvents(json.result);
@@ -109,6 +169,10 @@ function Page() {
               Add Event
             </button>
           </div>
+
+          <div className="flex justify-start w-full">
+            <DatePickerWithRange date={date} setDate={setDate} submit={submit} isSubmit={isSubmit} handleCLick={handleCLick}/>
+          </div>
           <div className="h-[28rem] overflow-y-auto mt-20">
             <div className="w-full flex justify-center h-100dvh">
               <table className="table-auto border-4 border-slate-300 w-full ">
@@ -125,7 +189,16 @@ function Page() {
                   </tr>
                 </thead>
                 <tbody className="">
-                  {events.map((event, index) => (
+                  {
+                    events.length === 0 ? (
+                      
+                      <tr>
+
+                        <td className="border-4 border-slate-300 text-center" colSpan="6">No Events Found</td>
+                      </tr>
+                    ):
+                    (
+                    events.map((event, index) => (
                     <EventTableRow
                       //for local sql
                       key={event.eventId}
@@ -182,22 +255,32 @@ function Page() {
                       // fund={event.fund}
                       // link={event.links}
                     />
+                  )
                   ))}
                 </tbody>
               </table>
             </div>
             <div className="flex items-end mt-5 flex-col w-full">
-              <button className="text-black bg-teal-400 rounded-md p-1 w-1/7 hover:bg-teal-500" onClick={()=>{
-                setShowDateRange(!showDateRange)
-              }}>Download Data!</button>
-
-              {showDateRange && <DateRangePicker onChange={setValue} value={value} className="" />}
+              <button
+                className="text-black bg-teal-400 rounded-md p-1 w-1/7 hover:bg-teal-500"
+                onClick={() => {
+                  setShowDateRange(!showDateRange);
+                }}
+              >
+                Download Data!
+              </button>
             </div>
           </div>
         </div>
         <AddEvent visible={visible} handleCLick={handleCLick} />
 
         <ShowEvent
+          visible={visibleShowEvent}
+          handleCLick={handleCLickShowEvent}
+          data={eventDataToShow}
+        />
+
+        <UpdateEvent 
           visible={visibleShowEvent}
           handleCLick={handleCLickShowEvent}
           data={eventDataToShow}

@@ -1,8 +1,9 @@
-"use client";
+
 import "./globals.css";
 import { Provider } from "react-redux";
 import store from "@/store/store";
-
+import {ToastContainer} from '@/components/NextToast'
+import "react-toastify/dist/ReactToastify.css";
 
 export default function RootLayout({ children }) {
   return (
@@ -14,9 +15,9 @@ export default function RootLayout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>
-        
-          <Provider store={store}>{children}</Provider>
-        
+          {children}
+          {/* <Provider store={store}>{children}</Provider> */}
+        <ToastContainer />
       </body>
     </html>
   );
