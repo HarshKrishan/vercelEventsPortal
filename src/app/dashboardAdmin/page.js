@@ -129,7 +129,22 @@ function Page() {
 
   const markUpdateEventTrue = ({eventId,name,date,description,organiser,link,image,fundedBy,fund}) => {
     // console.log("data in mark update event true",eventId,name,date,description,organiser,link,image,fundedBy,fund)
-    setEventDataToUpdate({eventId,name,date,description,organiser,link,image,fundedBy,fund});
+    // setEventDataToUpdate({eventId,name,date,description,organiser,link,image,fundedBy,fund});
+
+    setEventDataToUpdate({
+      ...eventDataToUpdate,
+      eventId: eventId,
+      name: name,
+      date: date,
+      description: description,
+      organiser: organiser,
+      link: link,
+      image: image,
+      fundedBy: fundedBy,
+      fund: fund,
+    });
+
+    console.log("eventData to update",eventDataToUpdate)
     setVisibleUpdateEvent(true);
   };
 

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { ToastContainer, toast } from "react-toastify";
+import  {toast}  from "react-toastify";
 import Link from "next/link";
 
 export default function Form({token}) {
@@ -27,6 +27,9 @@ export default function Form({token}) {
         if (!response.ok) {
 
           setError("An error occured")
+
+
+          return;
         }
         // console.log(response);
         return response.json();
@@ -35,10 +38,12 @@ export default function Form({token}) {
         console.log(json);
         if (json.status == 400) {
           setError(json.result);
+          return;
         }
         
 
           setUserEmail(json.user);
+
         
       
       })
@@ -70,9 +75,25 @@ export default function Form({token}) {
         // console.log(json);
         if (json.status == 400) {
           setError(json.result);
+          return;
         }
         if (json.status == 200) {
-          router.push("/login");
+
+          toast.success("Password reset successfully!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+          
+        }
+
+        if(json.status==204){
+          setError(json.result);
         }
       
       })

@@ -30,7 +30,7 @@ export async function POST(req) {
     .catch((err) => {
       console.log(err);
       return NextResponse.json(
-        { result: "Error finding User..." },
+        { result: "Something went wrong..." },
         { status: 500 }
       );
     });
@@ -38,7 +38,7 @@ export async function POST(req) {
     if(res.length==0){
         return NextResponse.json(
             { result: "User not found" },
-            { status: 200 }
+            { status: 500 }
         );
     }
 //   return NextResponse.json(

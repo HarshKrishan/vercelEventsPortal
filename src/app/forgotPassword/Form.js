@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-
+import { toast } from "react-toastify";
 export default function Form() {
   const [email, setEmail] = useState("");
   const router = useRouter();
@@ -31,13 +31,49 @@ export default function Form() {
           throw new Error(`HTTP error! Status: ${response.status}`);
         }
         console.log(response);
+        if(response.status==200){
+          toast.success(
+            "Email with the password reset link sent to your emailId!",
+            {
+              position: "top-right",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "dark",
+            }
+          );
+        }
+
+        if(response.status==500){
+          toast.error("User not found!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
+        
         return response.json();
-      })
-      .then((json) => {
-        console.log(json);
       })
       .catch((error) => {
         console.error("Error:", error);
+        toast.error("Something went wrong!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         
       })
       

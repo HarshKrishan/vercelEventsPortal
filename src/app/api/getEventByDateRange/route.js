@@ -29,7 +29,7 @@ export async function POST(req) {
   startDate = startDate.getFullYear()+"-"+startDate.getMonth()+1+"-"+startDate.getDate();
   endDate = endDate.getFullYear()+"-"+endDate.getMonth()+1+"-"+endDate.getDate();
 
-  console.log("start date",startDate,"end date",endDate);
+  // console.log("start date",startDate,"end date",endDate);
   connectSql();
 
   const events = await connection

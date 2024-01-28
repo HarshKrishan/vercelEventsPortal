@@ -32,14 +32,14 @@ export async function POST(req) {
     .catch((err) => {
       console.log(err);
       return NextResponse.json(
-        { result: "Error finding User..." },
+        { result: "Something went wrong..." },
         { status: 400 }
       );
     });
     if(res.length==0){
       return NextResponse.json(
           { result: "User not found" },
-          { status: 400 }
+          { status: 500 }
       );
   }
 

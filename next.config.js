@@ -4,6 +4,10 @@ const nextConfig = {
   images: {
     domains: ["img.icons8.com", "iiitd.ac.in"],
   },
+  env:{
+    NEXTAUTH_URL:"http://localhost:3000",
+    NEXTAUTH_SECRET:"8dfsaa9sf77f8as7f9af8df7aj2h52m5vg5d"
+  },
   async headers() {
     return [
       {

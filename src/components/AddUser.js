@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useState } from "react";
+import { toast } from "react-toastify";
 const AddUser = ({ visible, handleCLick }) => {
   
   // bg-black  bg-opacity-20 backdrop-blur-sm
@@ -45,6 +46,16 @@ const AddUser = ({ visible, handleCLick }) => {
     })
       .then((response) => {
         console.log(response);
+        toast.success("User added!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         handleCLick();
         setFirstName("");
         setLastName("");
@@ -54,7 +65,19 @@ const AddUser = ({ visible, handleCLick }) => {
         setRole("admin");
 
       })
-      .then((json) => console.log(json));
+      .then((error) =>{
+        console.log(error);
+        toast.error("error adding user!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      });
 
 
     //for vercel

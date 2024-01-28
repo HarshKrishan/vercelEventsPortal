@@ -45,6 +45,7 @@ function EventTableRow(props) {
       <td className={id % 2 === 0 ? evenClass : oddClass}>
         <div className="flex justify-center hover:cursor-pointer"
         onClick={()=>{
+          // console.log("sending this data to update",eventId,name,date,organiser,fundedBy,fund,link );
          markUpdateEventTrue({
             eventId,
             name,
