@@ -9,18 +9,32 @@ export const revalidate = 0;
 export const cache = "no-store";
 export async function POST(req) {
   // console.log("entering getAllEvents route");
-  // const session = await getServerSession();
-  // if (!session) {
-  //     return;
-  // }
+  const session = await getServerSession();
+  if (!session) {
+      return;
+  }
   //for local sql
 
-  const {startDate,endDate} = await req.json();
+  let {startDate,endDate} = await req.json();
+
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+
+  startDate = startDate.setTime(startDate.getTime() + 330 * 60 * 1000);
+  endDate = endDate.setTime(endDate.getTime() + 330 * 60 * 1000);
+
+  startDate = new Date(startDate);
+  endDate = new Date(endDate);
+  
+  startDate = startDate.getFullYear()+"-"+startDate.getMonth()+1+"-"+startDate.getDate();
+  endDate = endDate.getFullYear()+"-"+endDate.getMonth()+1+"-"+endDate.getDate();
+
+  console.log("start date",startDate,"end date",endDate);
   connectSql();
 
   const events = await connection
     .promise()
-    .query(`SELECT * FROM events where eDate between '${startDate}' and '${endDate}';`)
+    .query(`SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' order by eDate;`)
     .then(([data, fields]) => {
       // console.log(data);
       return data;

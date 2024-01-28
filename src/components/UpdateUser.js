@@ -2,21 +2,27 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
 import Image from "next/image";
-
+import { toast } from "react-toastify";
 const UpdateUser = ({ visible, handleCLick, data }) => {
+
+  const [showPassword, setShowPassword] = useState(false);
+
   // bg-black  bg-opacity-20 backdrop-blur-sm
+
+  // console.log("data", data)
   const userfname = data.fName;
   const userlname = data.lName;
   const userrole = data.role;
   const useremail = data.emailId;
   const userstatus = data.status;
+  const userPassword = data.password;
   // console.log(userfname, userlname, userrole, useremail, userstatus);
   const [firstName, setFirstName] = useState(userfname);
   const [lastName, setLastName] = useState(userlname);
   const [role, setRole] = useState(userrole);
   const [email, setEmail] = useState(useremail);
   const [status, setStatus] = useState(userstatus);
-  const [password, setPassword] = useState("");
+  const [password, setPassword] = useState(userPassword);
   // console.log(
   //   "after updating",
   //   firstName,
@@ -33,6 +39,7 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
     setRole(userrole);
     setEmail(useremail);
     setStatus(userstatus);
+    setPassword(userPassword);
   }, [visible]);
   if (!visible) return null;
 
@@ -68,6 +75,16 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
     })
       .then((response) => {
         console.log(response);
+        toast.success("User updated!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         setFirstName("");
         setLastName("");
         setPassword("");
@@ -76,7 +93,19 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((json) => console.log(json));
+      .then((error) =>{
+        console.log(error);
+        toast.error("Something went wrong!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      });
 
 
     //for vercel
@@ -111,6 +140,16 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
       
     })
       .then((response) => {
+        toast.success("User deleted!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
         console.log(response);
         setFirstName("");
         setLastName("");
@@ -120,7 +159,19 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((json) => console.log(json));
+      .then((erorr) =>{
+        console.log(erorr);
+        toast.error("Something went wrong!", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "dark",
+        });
+      });
 
     //for vercel
 
@@ -223,16 +274,22 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
               />
 
               <label className="text-black w-3/5">Password</label>
+              <div className="flex w-3/5 gap-x-2">
 
-              <input
-                className="m-2 rounded-md p-1 w-3/5"
-                type="email"
-                placeholder="xyz@gmail.com"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                }}
-              />
+                <input
+                  className="p-1 rounded-md w-full"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
+                />
+                <button onClick={(e) => setShowPassword(!showPassword)}>
+                  <Image src={showPassword ? "/view.png" : "/not-view.png"} height={25} width={30} alt="showPassword" />
+                </button>
+              </div>
+
               <label className="text-black w-3/5">Status</label>
 
               <select

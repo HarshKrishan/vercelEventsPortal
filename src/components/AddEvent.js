@@ -72,7 +72,7 @@ const AddEvent = ({ visible, handleCLick}) => {
           
         });
 
-        console.log(response);
+        // console.log(response);
         handleCLick();
       }) 
       .catch((err) => {
@@ -197,12 +197,13 @@ const AddEvent = ({ visible, handleCLick}) => {
                 placeholder="10"
                 value={event.numParticipants}
                 onChange={(e) => {
-                  if(e.target.value<0) setEvent({ ...event, numsParticipants: 0 });
-                  else{
+                  // if(e.target.value<0) setEvent({ ...event, numsParticipants: 0 });
+                  // else{
                     setEvent({ ...event, numsParticipants: e.target.value });
-                  }
+                  // }
                   
                 }}
+                min="0"
               />
               <label className="text-black w-3/5">Event Organiser</label>
 

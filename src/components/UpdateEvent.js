@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import CustomInput from "./CustomInput";
 import { toast } from "react-toastify";
@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const UpdateEvent = ({ visible, handleCLick, data }) => {
   const router = useRouter();
   const [speakers, setSpeakers] = useState([]);
-
+  // console.log("data for update", data);
   const addSpeaker = (title, affiliation) => {
     setSpeakers([...speakers, { title, affiliation }]);
   };
@@ -36,7 +36,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
     // e.preventDefault();
     // console.log("event",event);
 
-    const answer = window.confirm("Are you sure you want to add this event?");
+    const answer = window.confirm("Are you sure you want to update this event?");
     if (!answer) return;
 
     const formdata = new FormData();
@@ -118,7 +118,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-auto">
       <div className=" flex justify-center items-center overflow-auto">
         <div className=" w-4/5 flex-col items-center">
-          <h1 className="text-black text-2xl font-bold my-5 ">Add Event</h1>
+          <h1 className="text-black text-2xl font-bold my-5 ">Update Event</h1>
 
           <div>
             <div className="flex flex-col items-center">
@@ -181,12 +181,13 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                 placeholder="10"
                 value={event.numParticipants}
                 onChange={(e) => {
-                  if (e.target.value < 0)
-                    setEvent({ ...event, numsParticipants: 0 });
-                  else {
+                  // if (e.target.value < 0)
+                  //   setEvent({ ...event, numsParticipants: 0 });
+                  // else {
                     setEvent({ ...event, numsParticipants: e.target.value });
-                  }
+                  // }
                 }}
+                min="0"
               />
               <label className="text-black w-3/5">Event Organiser</label>
 

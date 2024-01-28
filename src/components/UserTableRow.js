@@ -3,7 +3,7 @@ import React,{useState} from 'react'
 import Image from 'next/image';
 
 function UserTableRow(props) {
-  const { id, name,lname, role, email, status } = props;
+  const { id, name,lname, role, email, status, password } = props;
   const oddClass = "border-r-4 border-b-2 border-slate-300 ";
   const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300 ";
   const [show, setShow] = useState(false);
@@ -41,7 +41,7 @@ function UserTableRow(props) {
           onClick={() => {
             // setVisible(true);
             // setShow(true);
-            markUpdateUserVisibleTrue({ name, lname, role, email, status });
+            markUpdateUserVisibleTrue({ name, lname, role, email, status,password });
           }}
         >
           <div className='flex justify-center hover:cursor-pointer'>

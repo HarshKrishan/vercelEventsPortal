@@ -31,13 +31,14 @@ function Page() {
     setUpdateUserVisible(false);
   };
 
-  const markUpdateUserVisibleTrue = ({ name, lname, role, email, status }) => {
+  const markUpdateUserVisibleTrue = ({ name, lname, role, email, status, password }) => {
     setUserDataToShow({
       fName: name,
       lName: lname,
       role: role,
       emailId: email,
       status: status,
+      password:password
     });
     setUpdateUserVisible(true);
   };
@@ -65,7 +66,7 @@ function Page() {
     //     // console.log(json),
     //     setData(json.result)
     //   );
-  }, [visible]);
+  }, [visible,updateUserVisible]);
 
   // if (!session) {
   //   redirect("/login");
@@ -111,7 +112,7 @@ function Page() {
                       role={user.role}
                       email={user.emailId}
                       status={user.status}
-
+                      password={user.pwd}
                       //for vercel sql
                       // name={user.fname}
                       // lname={user.lname}

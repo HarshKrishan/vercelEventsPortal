@@ -2,11 +2,10 @@
 import AddEvent from "@/components/AddEvent";
 import TopNavbar from "@/components/Navbar";
 import React, { useState, useEffect } from "react";
-import EventTableRow from "@/components/EventTableRow";
 import ShowEvent from "@/components/ShowEvent";
 import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
 import UpdateEvent from "@/components/UpdateEvent";
-import { redirect } from "next/navigation";
+import Events from "@/components/Events";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -30,41 +29,44 @@ function Page() {
     if(submit.first && submit.second){
       fetch("http://localhost:3000/api/getEventByDateRange", {
         method: "POST",
-        body: JSON.stringify(date),
+        body: JSON.stringify({
+          startDate: date.from,
+          endDate: date.to,
+        }),
       })
         .then((res) => res.json())
         .then((json) => {
           
           setEvents(json.result);
-          
+          // console.log("events",events);
           
         });
-        setFetchAgain(true);
+        // setFetchAgain(true);
       // console.log("now fetch data from date range",date);
       isSubmit({first:false,second:false})
       
       
 
     }
-  }, [submit,date,fetchAgain])
+  }, [submit,date])
   
-  useEffect(() => {
+  // useEffect(() => {
 
-    if(!fetchAgain) return;
-    console.log("now fetch data from date range");
-    fetch("http://localhost:3000/api/getEventByDateRange", {
-      method: "POST",
-      body: JSON.stringify(date),
-    })
-      .then((res) => res.json())
-      .then((json) => {
+  //   if(!fetchAgain) return;
+  //   console.log("now fetch data from date range");
+  //   fetch("http://localhost:3000/api/getEventByDateRange", {
+  //     method: "POST",
+  //     body: JSON.stringify(date),
+  //   })
+  //     .then((res) => res.json())
+  //     .then((json) => {
         
-        setEvents(json.result);
-        setFetchAgain(false);
+  //       setEvents(json.result);
+  //       setFetchAgain(false);
 
         
-      });
-  },[fetchAgain,date])
+  //     });
+  // },[fetchAgain,date])
 
 
 
@@ -87,10 +89,50 @@ function Page() {
     setVisibleShowEvent(false);
   };
 
+
+  const [visibleUpdateEvent, setVisibleUpdateEvent] = useState(false);
+
+  const [eventDataToUpdate, setEventDataToUpdate] = useState({
+    eventId: "",
+    name: "",
+    date: "",
+    description: "",
+    organiser: "",
+    link: "",
+    image: [],
+    fundedBy: "",
+    fund: "",
+  });
+
+  const handleCLickUpdateEvent = () => {
+    setEventDataToUpdate({
+      eventId: "",
+      name: "",
+      date: "",
+      description: "",
+      organiser: "",
+      link: "",
+      image: "",
+      fundedBy: "",
+      fund: "",
+    });
+    setVisibleUpdateEvent(false);
+  };
+
+
+
+
   const markShowEventTrue = ({eventId,name,date,description,organiser,link,image,fundedBy,fund}) => {
     setEventDataToShow({eventId,name,date,description,organiser,link,image,fundedBy,fund});
     setVisibleShowEvent(true);
   };
+
+  const markUpdateEventTrue = ({eventId,name,date,description,organiser,link,image,fundedBy,fund}) => {
+    // console.log("data in mark update event true",eventId,name,date,description,organiser,link,image,fundedBy,fund)
+    setEventDataToUpdate({eventId,name,date,description,organiser,link,image,fundedBy,fund});
+    setVisibleUpdateEvent(true);
+  };
+
 
   const handleCLick = () => {
     setVisible(false);
@@ -109,7 +151,10 @@ function Page() {
 
     fetch("http://localhost:3000/api/getEventByDateRange", {
       method: "POST",
-      body: JSON.stringify(date),
+      body: JSON.stringify({
+        startDate: date.from,
+        endDate: date.to,
+      }),
     })
       .then((res) => res.json())
       .then((json) => {
@@ -127,7 +172,7 @@ function Page() {
     //   });
 
 
-  },[visible]);
+  },[visible, visibleShowEvent, visibleUpdateEvent]);
 
   // console.log("events",events);
 
@@ -155,7 +200,7 @@ function Page() {
     saveTemplateAsFile(filename,dataObjToWrite)
   }
   return (
-    <div>
+    <div className="overflow-hidden">
       <TopNavbar>
         <div className="pt-5 px-16 w-full">
           <div className="flex justify-between">
@@ -173,7 +218,7 @@ function Page() {
           <div className="flex justify-start w-full">
             <DatePickerWithRange date={date} setDate={setDate} submit={submit} isSubmit={isSubmit} handleCLick={handleCLick}/>
           </div>
-          <div className="h-[28rem] overflow-y-auto mt-20">
+          {/* <div className="h-[28rem] overflow-y-auto mt-20">
             <div className="w-full flex justify-center h-100dvh">
               <table className="table-auto border-4 border-slate-300 w-full ">
                 <thead>
@@ -270,7 +315,11 @@ function Page() {
                 Download Data!
               </button>
             </div>
-          </div>
+          </div> */}
+          <Events events={events} markShowEventTrue={markShowEventTrue} setEventDataToShow={setEventDataToShow} handleDownloadButton={handleDownloadButton}
+            markUpdateEventTrue={markUpdateEventTrue} setEventDataToUpdate={setEventDataToUpdate}
+
+          />
         </div>
         <AddEvent visible={visible} handleCLick={handleCLick} />
 
@@ -281,9 +330,9 @@ function Page() {
         />
 
         <UpdateEvent 
-          visible={visibleShowEvent}
-          handleCLick={handleCLickShowEvent}
-          data={eventDataToShow}
+          visible={visibleUpdateEvent}
+          handleCLick={handleCLickUpdateEvent}
+          data={eventDataToUpdate}
         />
       </TopNavbar>
     </div>

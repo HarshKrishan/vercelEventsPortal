@@ -104,7 +104,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
           return response.json(); 
         })
         .then((jsonData) => {
-          console.log(jsonData);
+          // console.log(jsonData);
           setUploadedImages(jsonData.result);
         })
         .catch((error) => {

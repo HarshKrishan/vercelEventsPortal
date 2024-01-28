@@ -6,7 +6,7 @@ function EventTableRow(props) {
     const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300";
 
     const {markShowEventTrue} = props;
-
+    const {markUpdateEventTrue} = props;
     // console.log("key....",key);
     // console.log(id,name,date,organiser,fundedBy,fund,link);
   // console.log("name ",name,"id: ",eventId);
@@ -43,7 +43,19 @@ function EventTableRow(props) {
         </div>
       </td>
       <td className={id % 2 === 0 ? evenClass : oddClass}>
-        <div className="flex justify-center hover:cursor-pointer">
+        <div className="flex justify-center hover:cursor-pointer"
+        onClick={()=>{
+         markUpdateEventTrue({
+            eventId,
+            name,
+            date,
+            organiser,
+            fundedBy,
+            fund,
+            link,
+          }); 
+        }}
+        >
           <Image src="settings.svg" height={25} width={30} alt="setting" />
         </div>
       </td>
