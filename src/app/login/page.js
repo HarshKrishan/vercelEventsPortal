@@ -8,9 +8,12 @@ export async function Page() {
    if(session){
       redirect("/dashboardAdmin");
    }
+
+  const siteKey = process.env.SITE_KEY;
+
   return (
     <>
-      <Form/>
+      <Form siteKey={siteKey}/>
     </>
   );
 }

@@ -85,7 +85,7 @@ function Page() {
   });
 
   const handleCLickShowEvent = () => {
-    setEventDataToShow({eventId:"",name:"",date:"",description:"",organiser:"",link:"",image:"",fundedBy:"",fund:""});
+    setEventDataToShow({eventId:"",name:"",date:"",description:"",organiser:"",link:"",image:[],fundedBy:"",fund:""});
     setVisibleShowEvent(false);
   };
 
@@ -93,28 +93,28 @@ function Page() {
   const [visibleUpdateEvent, setVisibleUpdateEvent] = useState(false);
 
   const [eventDataToUpdate, setEventDataToUpdate] = useState({
-    eventId: "",
-    name: "",
-    date: "",
-    description: "",
-    organiser: "",
-    link: "",
-    image: [],
-    fundedBy: "",
-    fund: "",
+    EventId: "",
+    Name: "",
+    Date: "",
+    Description: "",
+    Organiser: "",
+    Link: "",
+    Image: [],
+    FundedBy: "",
+    Fund: "",
   });
 
   const handleCLickUpdateEvent = () => {
     setEventDataToUpdate({
-      eventId: "",
-      name: "",
-      date: "",
-      description: "",
-      organiser: "",
-      link: "",
-      image: "",
-      fundedBy: "",
-      fund: "",
+      EventId: "",
+      Name: "",
+      Date: "",
+      Description: "",
+      Organiser: "",
+      Link: "",
+      Image: [],
+      FundedBy: "",
+      Fund: "",
     });
     setVisibleUpdateEvent(false);
   };
@@ -128,20 +128,21 @@ function Page() {
   };
 
   const markUpdateEventTrue = ({eventId,name,date,description,organiser,link,image,fundedBy,fund}) => {
-    // console.log("data in mark update event true",eventId,name,date,description,organiser,link,image,fundedBy,fund)
+  
+    console.log("data in mark update event true",eventId,name,date,description,organiser,link,image,fundedBy,fund)
     // setEventDataToUpdate({eventId,name,date,description,organiser,link,image,fundedBy,fund});
 
     setEventDataToUpdate({
       ...eventDataToUpdate,
-      eventId: eventId,
-      name: name,
-      date: date,
-      description: description,
-      organiser: organiser,
-      link: link,
-      image: image,
-      fundedBy: fundedBy,
-      fund: fund,
+      eventId,
+      name,
+      date,
+      description,
+      organiser,
+      link,
+      image,
+      fundedBy,
+      fund,
     });
 
     console.log("eventData to update",eventDataToUpdate)

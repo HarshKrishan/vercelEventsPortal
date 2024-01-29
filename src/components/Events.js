@@ -56,8 +56,8 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
                   link={event.links}
                   markShowEventTrue={markShowEventTrue}
                   setEventDataToShow={setEventDataToShow}
-                markUpdateEventTrue={markUpdateEventTrue}
-                setEventDataToUpdate={setEventDataToUpdate}
+                  markUpdateEventTrue={markUpdateEventTrue}
+                  setEventDataToUpdate={setEventDataToUpdate}
                   //for vercel sql
                   // key={event.eventid}
                   // eventId={event.eventid}

@@ -7,25 +7,25 @@ import { toast } from "react-toastify";
 
 const UpdateEvent = ({ visible, handleCLick, data }) => {
   const router = useRouter();
-  const [speakers, setSpeakers] = useState([]);
+  // const [speakers, setSpeakers] = useState([]);
   // console.log("data for update", data);
-  const addSpeaker = (title, affiliation) => {
-    setSpeakers([...speakers, { title, affiliation }]);
-  };
+  // const addSpeaker = (title, affiliation) => {
+  //   // setSpeakers([...speakers, { title, affiliation }]);
+  //   setEvent({ ...event, speakers: [...event.speakers, { title, affiliation }] });  
+  // };
 
-  function handleDelete(index) {
-    // console.log("index",index)
-    const newSpeakers = speakers.filter((speaker, i) => i !== index);
-    setSpeakers(newSpeakers);
-  }
+  // function handleDelete(index) {
+  //   // console.log("index",index)
+  //   const newSpeakers = event.speakers.filter((speaker, i) => i !== index);
+  //   setEvent({ ...event, speakers: newSpeakers });
+  // }
 
   const [event, setEvent] = useState({
+    eventId: data.eventId,
     name: data.name,
     date:data.date,
-    time: data.time,
     description: data.description,
-    speakers: data.speakers,
-    numParticipants: data.numParticipants,
+    // speakers: data.speakers,
     organiser: data.organiser,
     link: data.link,
     fundedBy:data.fundedBy,
@@ -42,14 +42,14 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
     const formdata = new FormData();
     formdata.append("name", event.name);
     formdata.append("date", event.date);
-    formdata.append("time", event.time);
+    // formdata.append("time", event.time);
     formdata.append("description", event.description);
     formdata.append("organiser", event.organiser);
     formdata.append("link", event.link);
     formdata.append("fundedBy", event.fundedBy);
     formdata.append("fund", event.fund);
-    formdata.append("numParticipants", event.numParticipants);
-    formdata.append("speakers", JSON.stringify(speakers));
+    // formdata.append("numParticipants", event.numParticipants);
+    // formdata.append("speakers", JSON.stringify(speakers));
 
     //for local
 
@@ -98,18 +98,19 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
     //   .then((json) => console.log(json));
 
     setEvent({
+      eventId: "",
       name: "",
       date: "",
-      time: "",
+      // time: "",
       description: "",
-      numParticipants: 0,
+      // numParticipants: 0,
       organiser: "",
       link: "",
       fundedBy: "",
       fund: "",
     });
 
-    setSpeakers([]);
+    // setSpeakers([]);
     //  router.refresh();
   };
 
@@ -144,7 +145,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   setEvent({ ...event, date: e.target.value });
                 }}
               />
-              <label className="text-black w-3/5">Event Time</label>
+              {/* <label className="text-black w-3/5">Event Time</label>
 
               <input
                 className="m-2 rounded-md p-1 w-3/5"
@@ -154,7 +155,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                 onChange={(e) => {
                   setEvent({ ...event, time: e.target.value });
                 }}
-              />
+              /> */}
               <label className="text-black w-3/5">Event Description</label>
 
               <textarea
@@ -166,14 +167,14 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   setEvent({ ...event, description: e.target.value });
                 }}
               />
-
+{/* 
               <CustomInput
                 speakers={speakers}
                 addSpeaker={addSpeaker}
                 handleDelete={handleDelete}
                 className="w-3/5"
-              />
-              <label className="text-black w-3/5">No. of Participants </label>
+              /> */}
+              {/* <label className="text-black w-3/5">No. of Participants </label>
 
               <input
                 className="m-2 rounded-md p-1 w-3/5"
@@ -188,7 +189,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   // }
                 }}
                 min="0"
-              />
+              /> */}
               <label className="text-black w-3/5">Event Organiser</label>
 
               <input
@@ -250,16 +251,17 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   className="text-black bg-teal-400 rounded-md p-1 w-1/3 hover:bg-teal-500"
                   onClick={() => {
                     setEvent({
+                      eventId: "",
                       name: "",
                       date: "",
-                      time: "",
+                      // time: "",
                       description: "",
                       organiser: "",
                       link: "",
                       fundedBy: "",
                       fund: "",
                     });
-                    setSpeakers([]);
+                    // setSpeakers([]);
                     handleCLick();
                   }}
                 >
