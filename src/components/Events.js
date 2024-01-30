@@ -1,6 +1,6 @@
 import React from 'react'
 import EventTableRow from './EventTableRow'
-function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTrue, setEventDataToUpdate}) {
+function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTrue, setEventDataToUpdate,setShowDateRange,showDateRange,handleDownloadButton}) {
     // console.log(events)
   return (
     <div className="h-[28rem] mt-20">
@@ -95,7 +95,7 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
         <button
           className="text-black bg-teal-400 rounded-md p-1 w-1/7 hover:bg-teal-500"
           onClick={() => {
-            setShowDateRange(!showDateRange);
+            handleDownloadButton();
           }}
         >
           Download Data!

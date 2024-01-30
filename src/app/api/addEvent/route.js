@@ -32,7 +32,8 @@ export async function POST(req) {
   const link = data.get("link");
   const fundedBy = data.get("fundedBy");
   const fund = data.get("fund");
-  const numParticipants = data.get("numParticipants");
+  let numParticipants = data.get("numParticipants");
+  numParticipants = parseInt(numParticipants);
   const speakers = JSON.parse(data.get("speakers"));
   // console.log("speakers", speakers)
   const randomId = crypto.randomBytes(64).toString("hex");

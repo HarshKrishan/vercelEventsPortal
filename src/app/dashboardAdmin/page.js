@@ -93,15 +93,15 @@ function Page() {
   const [visibleUpdateEvent, setVisibleUpdateEvent] = useState(false);
 
   const [eventDataToUpdate, setEventDataToUpdate] = useState({
-    EventId: "",
-    Name: "",
-    Date: "",
-    Description: "",
-    Organiser: "",
-    Link: "",
+    EventId: "4",
+    Name: "testEvent",
+    Date: "30-1-24",
+    Description: "aaj ka event",
+    Organiser: "mai",
+    Link: "nhi pata",
     Image: [],
-    FundedBy: "",
-    Fund: "",
+    FundedBy: "me",
+    Fund: "1 crore",
   });
 
   const handleCLickUpdateEvent = () => {
@@ -131,9 +131,7 @@ function Page() {
   
     console.log("data in mark update event true",eventId,name,date,description,organiser,link,image,fundedBy,fund)
     // setEventDataToUpdate({eventId,name,date,description,organiser,link,image,fundedBy,fund});
-
-    setEventDataToUpdate({
-      ...eventDataToUpdate,
+    const event = {
       eventId,
       name,
       date,
@@ -143,7 +141,10 @@ function Page() {
       image,
       fundedBy,
       fund,
-    });
+    }
+
+    // console.log("event",event)
+    setEventDataToUpdate(event);
 
     console.log("eventData to update",eventDataToUpdate)
     setVisibleUpdateEvent(true);
@@ -333,7 +334,7 @@ function Page() {
             </div>
           </div> */}
           <Events events={events} markShowEventTrue={markShowEventTrue} setEventDataToShow={setEventDataToShow} handleDownloadButton={handleDownloadButton}
-            markUpdateEventTrue={markUpdateEventTrue} setEventDataToUpdate={setEventDataToUpdate}
+          markUpdateEventTrue={markUpdateEventTrue} setEventDataToUpdate={setEventDataToUpdate} showDateRange={date} setShowDateRange={setDate} 
 
           />
         </div>

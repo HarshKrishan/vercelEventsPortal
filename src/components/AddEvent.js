@@ -51,6 +51,7 @@ const AddEvent = ({ visible, handleCLick}) => {
     formdata.append("fundedBy", event.fundedBy);
     formdata.append("fund", event.fund);
     formdata.append("numParticipants", event.numParticipants);
+    console.log("numParticipants",event.numParticipants);
     formdata.append("speakers", JSON.stringify(speakers));
     
     //for local
@@ -199,7 +200,7 @@ const AddEvent = ({ visible, handleCLick}) => {
                 onChange={(e) => {
                   // if(e.target.value<0) setEvent({ ...event, numsParticipants: 0 });
                   // else{
-                    setEvent({ ...event, numsParticipants: e.target.value });
+                    setEvent({ ...event, numParticipants: e.target.value });
                   // }
                   
                 }}
