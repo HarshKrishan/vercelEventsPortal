@@ -1,55 +1,38 @@
-import React from 'react'
+import React from "react";
 
-const CustomInput = ({speakers,addSpeaker,handleDelete}) => {
-
-  const [title, setTitle] = React.useState('Mr')
-  const [affiliation, setAffiliation] = React.useState('')
+const CustomInput = ({ speakers, addSpeaker, handleDelete }) => {
+  const [title, setTitle] = React.useState("Mr");
+  const [affiliation, setAffiliation] = React.useState("");
 
   const [show, setShow] = React.useState(false);
 
-  const [isOpen,setIsOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = React.useState(false);
 
-  function addThisSpeaker(){
-
-    if(isOpen){
-      if(title.length>0 && affiliation.length>0){
-        addSpeaker(title,affiliation)
+  function addThisSpeaker() {
+    if (isOpen) {
+      if (title.length > 0 && affiliation.length > 0) {
+        addSpeaker(title, affiliation);
         setTitle("Mr");
         setAffiliation("");
-        
       }
 
       setShow(false);
       setIsOpen(false);
-    }else{
-      
+    } else {
       setShow(true);
       setIsOpen(true);
     }
-    
-    
-    
   }
 
-  const[allSpeakers,setAllSpeakers]=React.useState([])
+  const [allSpeakers, setAllSpeakers] = React.useState([]);
 
-  React.useEffect(()=>{
-    setAllSpeakers(speakers)
-  }
-  ,[speakers])
-
-
-  
+  React.useEffect(() => {
+    setAllSpeakers(speakers);
+  }, [speakers]);
 
   return (
     <>
       <div className=" flex mb-2 flex-start w-3/5">
-        {/* {allSpeakers.map((speaker, index) => {
-        <div key={index}>
-          <p>{speaker.title}</p>
-          <p>{speaker.affiliation}</p>
-        </div>;
-      })} */}
         <p className="text-black inline-block">Speakers:</p>
         <div className="flex flex-col justify-start w-full">
           {speakers.map((speaker, index) => {
@@ -118,6 +101,6 @@ const CustomInput = ({speakers,addSpeaker,handleDelete}) => {
       )}
     </>
   );
-}
+};
 
-export default CustomInput
+export default CustomInput;

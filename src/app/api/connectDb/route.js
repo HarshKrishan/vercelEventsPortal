@@ -11,7 +11,7 @@ const connectSql = ()=>{
     try{
         connection.connect(function(err) {
             if (err) throw err;
-            console.log("Connected!");
+            // console.log("Connected!");
         });
 
     }catch(error){
@@ -25,7 +25,6 @@ connection.connect(function(err) {
     if (err) throw err;
     // console.log("Connected!");
 });
-// const connectSql = null;    //uncomment these lines
-// const connection = null;    //uncomment these lines
+
 export default connectSql;
 export {connection};

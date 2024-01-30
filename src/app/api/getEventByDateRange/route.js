@@ -1,21 +1,17 @@
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
-import { createClient } from "@vercel/postgres";
 import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const cache = "no-store";
+import { getSession } from "next-auth/react";
 export async function POST(req) {
-  // console.log("entering getAllEvents route");
   const session = await getServerSession();
   if (!session) {
-      return;
+    return;
   }
-  //for local sql
+  
 
-  let {startDate,endDate} = await req.json();
+  const {emailId} = session;
+
+  let { startDate, endDate } = await req.json();
 
   startDate = new Date(startDate);
   endDate = new Date(endDate);
@@ -25,18 +21,33 @@ export async function POST(req) {
 
   startDate = new Date(startDate);
   endDate = new Date(endDate);
-  
-  startDate = startDate.getFullYear()+"-"+startDate.getMonth()+1+"-"+startDate.getDate();
-  endDate = endDate.getFullYear()+"-"+endDate.getMonth()+1+"-"+endDate.getDate();
 
-  // console.log("start date",startDate,"end date",endDate);
+  startDate =
+    startDate.getFullYear() +
+    "-" +
+    startDate.getMonth() +
+    1 +
+    "-" +
+    startDate.getDate();
+  endDate =
+    endDate.getFullYear() +
+    "-" +
+    endDate.getMonth() +
+    1 +
+    "-" +
+    endDate.getDate();
+
   connectSql();
+
+  const queryForAdmin = `SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' order by eDate;`;
+
+  const queryForCoAdmin = `SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' and Users_emailId = '${emailId}' order by eDate;`;
 
   const events = await connection
     .promise()
-    .query(`SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' order by eDate;`)
+    .query(role == "admin" ? queryForAdmin : queryForCoAdmin)
     .then(([data, fields]) => {
-      // console.log(data);
+      console.log(data)
       return data;
     })
     .catch((err) => {
@@ -48,21 +59,4 @@ export async function POST(req) {
     });
 
   return NextResponse.json({ result: events }, { status: 200 });
-
-  //for vercel sql
-  // const client = createClient();
-  // await client.connect();
-
-  // try {
-  //     const { rows, fields } = await client.sql`select * from events;`;
-  //     return NextResponse.json({ result: rows }, { status: 200 });
-
-  // } catch (error) {
-  //     console.log("error connecting sql", error)
-  // }
-  // finally {
-  //     await client.end();
-  // }
-  // revalidatePath("https://iiit-events-portal.vercel.app/dashboardAdmin");
-  // return NextResponse.json({ result: "Error getting events" }, { status: 200 });
 }

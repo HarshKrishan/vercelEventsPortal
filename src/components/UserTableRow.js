@@ -1,18 +1,13 @@
 "use client";
-import React,{useState} from 'react'
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 
 function UserTableRow(props) {
-  const { id, name,lname, role, email, status, password } = props;
+  const { id, name, lname, role, email, status, password } = props;
   const oddClass = "border-r-4 border-b-2 border-slate-300 ";
   const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300 ";
-  const [show, setShow] = useState(false);
-  const handleCLick = () => {
-    alert("hi!")
-    setShow(false);
-  };
-  const {markUpdateUserVisibleTrue} = props;
-  
+
+  const { markUpdateUserVisibleTrue } = props;
 
   return (
     <>
@@ -33,18 +28,19 @@ function UserTableRow(props) {
           <div className="flex justify-center">{status}</div>
         </td>
         <td
-          className={
-            id % 2 === 0
-              ? evenClass 
-              : oddClass
-          }
+          className={id % 2 === 0 ? evenClass : oddClass}
           onClick={() => {
-            // setVisible(true);
-            // setShow(true);
-            markUpdateUserVisibleTrue({ name, lname, role, email, status,password });
+            markUpdateUserVisibleTrue({
+              name,
+              lname,
+              role,
+              email,
+              status,
+              password,
+            });
           }}
         >
-          <div className='flex justify-center hover:cursor-pointer'>
+          <div className="flex justify-center hover:cursor-pointer">
             <Image src="settings.svg" height={25} width={30} alt="modify" />
           </div>
         </td>
@@ -53,4 +49,4 @@ function UserTableRow(props) {
   );
 }
 
-export default UserTableRow
+export default UserTableRow;

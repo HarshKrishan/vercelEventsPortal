@@ -3,10 +3,8 @@ import React from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 const AddUser = ({ visible, handleCLick }) => {
-  
-  // bg-black  bg-opacity-20 backdrop-blur-sm
-  const [firstName,setFirstName] = useState("");
-  const [lastName,setLastName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [role, setRole] = useState("admin");
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("active");
@@ -14,7 +12,7 @@ const AddUser = ({ visible, handleCLick }) => {
 
   if (!visible) return null;
 
-  const handleSubmit=() => {
+  const handleSubmit = () => {
     const data = {
       firstName: firstName,
       lastName: lastName,
@@ -23,7 +21,7 @@ const AddUser = ({ visible, handleCLick }) => {
       email: email,
       status: status,
     };
-    // console.log(data);
+
     if (
       firstName === "" ||
       lastName === "" ||
@@ -35,8 +33,6 @@ const AddUser = ({ visible, handleCLick }) => {
       alert("Please fill all the fields");
       return;
     }
-
-    //for local
     fetch("http://localhost:3000/api/addUser", {
       method: "POST",
       body: JSON.stringify(data),
@@ -45,7 +41,6 @@ const AddUser = ({ visible, handleCLick }) => {
       },
     })
       .then((response) => {
-        console.log(response);
         toast.success("User added!", {
           position: "top-right",
           autoClose: 5000,
@@ -63,10 +58,8 @@ const AddUser = ({ visible, handleCLick }) => {
         setEmail("");
         setStatus("active");
         setRole("admin");
-
       })
-      .then((error) =>{
-        console.log(error);
+      .then((error) => {
         toast.error("error adding user!", {
           position: "top-right",
           autoClose: 5000,
@@ -78,29 +71,6 @@ const AddUser = ({ visible, handleCLick }) => {
           theme: "light",
         });
       });
-
-
-    //for vercel
-
-    // fetch("https://iiit-events-portal.vercel.app/api/addUser", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     handleCLick();
-    //     setFirstName("");
-    //     setLastName("");
-    //     setPassword("");
-    //     setEmail("");
-    //     setStatus("active");
-    //     setRole("admin");
-
-    //   })
-    //   .then((json) => console.log(json));
   };
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200">

@@ -1,25 +1,22 @@
 "use client";
-import { useRouter } from 'next/navigation';
-import React, { use, useEffect } from 'react'
-import { useState } from 'react'
-import CustomInput from './CustomInput';
-import {toast } from "react-toastify";
 
-const AddEvent = ({ visible, handleCLick}) => {
-  const router = useRouter();
+import React from "react";
+import { useState } from "react";
+import CustomInput from "./CustomInput";
+import { toast } from "react-toastify";
+
+const AddEvent = ({ visible, handleCLick }) => {
   const [speakers, setSpeakers] = useState([]);
-
 
   const addSpeaker = (title, affiliation) => {
     setSpeakers([...speakers, { title, affiliation }]);
   };
 
   function handleDelete(index) {
-    // console.log("index",index)
     const newSpeakers = speakers.filter((speaker, i) => i !== index);
     setSpeakers(newSpeakers);
   }
-  
+
   const [event, setEvent] = useState({
     name: "",
     date: "",
@@ -30,16 +27,12 @@ const AddEvent = ({ visible, handleCLick}) => {
     organiser: "",
     link: "",
     fundedBy: "",
-    fund:"",
+    fund: "",
   });
   if (!visible) return null;
   const handleSubmit = async () => {
-    // e.preventDefault();
-    // console.log("event",event);
-
     const answer = window.confirm("Are you sure you want to add this event?");
     if (!answer) return;
-
 
     const formdata = new FormData();
     formdata.append("name", event.name);
@@ -51,11 +44,8 @@ const AddEvent = ({ visible, handleCLick}) => {
     formdata.append("fundedBy", event.fundedBy);
     formdata.append("fund", event.fund);
     formdata.append("numParticipants", event.numParticipants);
-    console.log("numParticipants",event.numParticipants);
     formdata.append("speakers", JSON.stringify(speakers));
-    
-    //for local
-    
+
     fetch("http://localhost:3000/api/addEvent", {
       method: "POST",
       body: formdata,
@@ -70,14 +60,10 @@ const AddEvent = ({ visible, handleCLick}) => {
           draggable: true,
           progress: undefined,
           theme: "dark",
-          
         });
-
-        // console.log(response);
         handleCLick();
-      }) 
+      })
       .catch((err) => {
-        console.log(err);
         toast.error("error adding event!", {
           position: "top-right",
           autoClose: 5000,
@@ -89,26 +75,8 @@ const AddEvent = ({ visible, handleCLick}) => {
           theme: "light",
           transition: Bounce,
         });
-
       });
 
-
-      
-
-
-
-
-    //for vercel
-    // fetch("https://iiit-events-portal.vercel.app/api/addEvent", {
-    //   method: "POST",
-    //   body: formdata,
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //   })
-    //   .then((json) => console.log(json));
-        
-    
     setEvent({
       name: "",
       date: "",
@@ -118,20 +86,14 @@ const AddEvent = ({ visible, handleCLick}) => {
       organiser: "",
       link: "",
       fundedBy: "",
-      fund:"",
+      fund: "",
     });
 
     setSpeakers([]);
-    //  router.refresh();
+  };
 
-  }
-
-  
-  // bg-black  bg-opacity-20 backdrop-blur-sm
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-auto">
-
-      
       <div className=" flex justify-center items-center overflow-auto">
         <div className=" w-4/5 flex-col items-center">
           <h1 className="text-black text-2xl font-bold my-5 ">Add Event</h1>
@@ -182,7 +144,6 @@ const AddEvent = ({ visible, handleCLick}) => {
                   setEvent({ ...event, description: e.target.value });
                 }}
               />
-              
 
               <CustomInput
                 speakers={speakers}
@@ -198,11 +159,7 @@ const AddEvent = ({ visible, handleCLick}) => {
                 placeholder="10"
                 value={event.numParticipants}
                 onChange={(e) => {
-                  // if(e.target.value<0) setEvent({ ...event, numsParticipants: 0 });
-                  // else{
-                    setEvent({ ...event, numParticipants: e.target.value });
-                  // }
-                  
+                  setEvent({ ...event, numParticipants: e.target.value });
                 }}
                 min="0"
               />
@@ -253,13 +210,11 @@ const AddEvent = ({ visible, handleCLick}) => {
                 }}
               />
 
-              
               <div className="flex justify-between w-3/5 mb-5">
                 <button
                   className="text-black bg-teal-400 rounded-md p-1 w-1/3 hover:bg-teal-500"
                   onClick={() => {
                     handleSubmit();
-                    // handleCLick();
                   }}
                 >
                   Add Event
@@ -292,4 +247,4 @@ const AddEvent = ({ visible, handleCLick}) => {
   );
 };
 
-export default AddEvent
+export default AddEvent;

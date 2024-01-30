@@ -5,14 +5,9 @@ import AddUser from "@/components/AddUser";
 import UserTableRow from "@/components/UserTableRow";
 import UpdateUser from "@/components/UpdateUser";
 
-
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const cache = "no-store";
-
 function Page() {
   const [visible, setVisible] = useState(false);
-  
+
   const [userDataToShow, setUserDataToShow] = useState({
     fName: "",
     lName: "",
@@ -31,14 +26,21 @@ function Page() {
     setUpdateUserVisible(false);
   };
 
-  const markUpdateUserVisibleTrue = ({ name, lname, role, email, status, password }) => {
+  const markUpdateUserVisibleTrue = ({
+    name,
+    lname,
+    role,
+    email,
+    status,
+    password,
+  }) => {
     setUserDataToShow({
       fName: name,
       lName: lname,
       role: role,
       emailId: email,
       status: status,
-      password:password
+      password: password,
     });
     setUpdateUserVisible(true);
   };
@@ -46,32 +48,11 @@ function Page() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    //for local
-    fetch('http://localhost:3000/api/getAllUsers')
-    .then(res => res.json())
-        .then(json =>
-
-          // console.log(json),
-          setData(json.result)
-        )
-
-    //for vercel
-    // fetch("https://iiit-events-portal.vercel.app/api/getAllUsers", {
-    //   cache: "no-cache",
-    //   next: { revalidate: 0 },
-    //   cache:"no-store",
-    // })
-    //   .then((res) => res.json())
-    //   .then((json) =>
-    //     // console.log(json),
-    //     setData(json.result)
-    //   );
-  }, [visible,updateUserVisible]);
-
-  // if (!session) {
-  //   redirect("/login");
-  //   return null;
-  // }
+    fetch("http://localhost:3000/api/getAllUsers")
+      .then((res) => res.json())
+      .then((json) => setData(json.result))
+      .catch((err) => {});
+  }, [visible, updateUserVisible]);
 
   return (
     <div>
@@ -106,19 +87,12 @@ function Page() {
                     <UserTableRow
                       key={index + 1}
                       id={index + 1}
-                      //for local sql
                       name={user.fName}
                       lname={user.lName}
                       role={user.role}
                       email={user.emailId}
                       status={user.status}
                       password={user.pwd}
-                      //for vercel sql
-                      // name={user.fname}
-                      // lname={user.lname}
-                      // role={user.role}
-                      // email={user.emailid}
-                      // status={user.status}
                       markUpdateUserVisibleTrue={markUpdateUserVisibleTrue}
                     />
                   ))}

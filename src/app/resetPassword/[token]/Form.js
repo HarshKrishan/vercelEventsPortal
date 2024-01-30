@@ -1,20 +1,14 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
-import  {toast}  from "react-toastify";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-export default function Form({token}) {
-  
+export default function Form({ token }) {
   const [password, setPassword] = useState("");
-  const router = useRouter();
   const [error, setError] = useState("");
   const [userEmail, setUserEmail] = useState("");
   useEffect(() => {
-    // console.log(token);
-
     fetch("http://localhost:3000/api/verifyToken", {
       method: "POST",
       body: JSON.stringify({ token: token }),
@@ -23,39 +17,28 @@ export default function Form({token}) {
       },
     })
       .then((response) => {
-        // console.log(response);
         if (!response.ok) {
-
-          setError("An error occured")
-
+          setError("An error occured");
 
           return;
         }
-        // console.log(response);
+
         return response.json();
       })
       .then((json) => {
-        console.log(json);
-        if (json.status == 400) {
+        if (json.status == 204) {
           setError(json.result);
           return;
         }
-        
 
-          setUserEmail(json.user);
-
-        
-      
+        setUserEmail(json.user);
       })
       .catch((error) => {
-        console.error("Error:", error);
-        setError("An error occured")
+        setError("An error occured");
       });
-
   }, [token]);
-  
+
   const handleClick = async () => {
-    console.log(password, userEmail)
     fetch("http://localhost:3000/api/resetPassword", {
       method: "POST",
       body: JSON.stringify({ password: password, email: userEmail }),
@@ -64,21 +47,18 @@ export default function Form({token}) {
       },
     })
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
-          setError("An error occured")
+          setError("An error occured");
         }
-        // console.log(response);
+
         return response.json();
       })
       .then((json) => {
-        // console.log(json);
         if (json.status == 400) {
           setError(json.result);
           return;
         }
         if (json.status == 200) {
-
           toast.success("Password reset successfully!", {
             position: "top-right",
             autoClose: 5000,
@@ -89,21 +69,15 @@ export default function Form({token}) {
             progress: undefined,
             theme: "dark",
           });
-          
         }
 
-        if(json.status==204){
+        if (json.status == 204) {
           setError(json.result);
         }
-      
       })
       .catch((error) => {
-        console.error("Error:", error);
-        setError("An error occured")
+        setError("An error occured");
       });
-
-    
-    
   };
 
   return (
@@ -112,7 +86,7 @@ export default function Form({token}) {
       <div className="absolute z-10 top-0 p-6 cursor-pointer">
         <Link href="/">
           <Image
-            src="https://iiitd.ac.in/sites/default/files/style3colorsmall.png"
+            src="/logo.png"
             width={450}
             height={450}
             alt="logo"
@@ -134,7 +108,6 @@ export default function Form({token}) {
           />
           <div className="flex justify-center w-3/5 my-3">
             <button
-              // href="/dashboardAdmin"
               onClick={handleClick}
               disabled={error.length > 0}
               className="text-black bg-teal-400 rounded-md p-1 w-1/3 text-center"

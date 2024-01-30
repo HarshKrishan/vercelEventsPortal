@@ -1,53 +1,34 @@
+import { data } from "autoprefixer";
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
-import { createClient } from "@vercel/postgres";
-import { getServerSession } from "next-auth";
-import { revalidatePath } from "next/cache";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const cache = "no-store";
 export async function GET(req) {
-    // console.log("entering getAllEvents route");
-    // const session = await getServerSession();
-    // if (!session) {
-    //     return;
-    // }
-    //for local sql
-    connectSql();
+  connectSql();
 
-    const events = await connection.promise().query("SELECT * FROM events").then(([data,fields]) => {
-        // console.log(data);
-        return data;
-        
-    }).catch((err) => {
-        console.log(err);
-        return NextResponse.json(
-            {result:"Error getting events"},
-            {status:500}
-        );
-    }
-    );
+  const events = await connection
+    .promise()
+    .query("SELECT * FROM events ORDER BY eDate DESC")
+    .then(([data, fields]) => {
+      return data;
+    })
+    .catch((err) => {
+      return NextResponse.json(
+        { result: "Error getting events" },
+        { status: 500 }
+      );
+    });
 
-    return NextResponse.json(
-        {result:events},
-        {status:200},
-    );
+  const dataToSend = [];
 
-    //for vercel sql
-    // const client = createClient();
-    // await client.connect();
+events.map((event) => {
+    dataToSend.push({
+        id: event.id,
+        eName: event.eName,
+        description: event.description,
+        eDate: event.eDate,
+        eTime:event.eTime
+    });
+});
 
-    // try {
-    //     const { rows, fields } = await client.sql`select * from events;`;
-    //     return NextResponse.json({ result: rows }, { status: 200 });
-
-    // } catch (error) {
-    //     console.log("error connecting sql", error)
-    // }
-    // finally {
-    //     await client.end();
-    // }
-    // revalidatePath("https://iiit-events-portal.vercel.app/dashboardAdmin");
-    // return NextResponse.json({ result: "Error getting events" }, { status: 200 });
+  return NextResponse.json({ result: dataToSend }, { status: 200 });
 }

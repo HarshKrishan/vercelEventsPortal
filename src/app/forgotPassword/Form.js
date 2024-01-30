@@ -1,14 +1,10 @@
 "use client";
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { toast } from "react-toastify";
 export default function Form() {
   const [email, setEmail] = useState("");
-  const router = useRouter();
-  const [error, setError] = useState("");
-
   const isValidEmail = (email) => {
     const regex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
     return regex.test(email);
@@ -21,17 +17,25 @@ export default function Form() {
 
     fetch("http://localhost:3000/api/forgetPassword", {
       method: "POST",
-      body: JSON.stringify({email:email}),
+      body: JSON.stringify({ email: email }),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+        if (response.status == 500) {
+          toast.error("Something went wrong!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
         }
-        console.log(response);
-        if(response.status==200){
+        if (response.status == 200) {
           toast.success(
             "Email with the password reset link sent to your emailId!",
             {
@@ -47,7 +51,7 @@ export default function Form() {
           );
         }
 
-        if(response.status==500){
+        if (response.status == 204) {
           toast.error("User not found!", {
             position: "top-right",
             autoClose: 5000,
@@ -59,11 +63,10 @@ export default function Form() {
             theme: "light",
           });
         }
-        
+
         return response.json();
       })
       .catch((error) => {
-        console.error("Error:", error);
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
@@ -74,12 +77,7 @@ export default function Form() {
           progress: undefined,
           theme: "light",
         });
-        
-      })
-      
-
-
-    
+      });
   };
 
   return (
@@ -88,7 +86,7 @@ export default function Form() {
       <div className="absolute z-10 top-0 p-6 cursor-pointer">
         <Link href="/">
           <Image
-            src="https://iiitd.ac.in/sites/default/files/style3colorsmall.png"
+            src="/logo.png"
             width={450}
             height={450}
             alt="logo"
@@ -108,10 +106,8 @@ export default function Form() {
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
           />
-          
           <div className="flex justify-center w-3/5 my-3">
             <button
-              // href="/dashboardAdmin"
               onClick={handleSubmit}
               className="text-black bg-teal-400 rounded-md p-1 w-1/3 text-center"
             >

@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
-
 import { getServerSession } from "next-auth";
 import Form from "./Form";
 
-export async function Page({params}) {
+export async function Page({ params }) {
   const session = await getServerSession();
   const { token } = params;
   if (session) {
@@ -11,7 +10,7 @@ export async function Page({params}) {
   }
   return (
     <>
-        <Form token={token}/>
+      <Form token={token} />
     </>
   );
 }

@@ -4,34 +4,20 @@ import { useState } from "react";
 import Image from "next/image";
 import { toast } from "react-toastify";
 const UpdateUser = ({ visible, handleCLick, data }) => {
-
   const [showPassword, setShowPassword] = useState(false);
 
-  // bg-black  bg-opacity-20 backdrop-blur-sm
-
-  // console.log("data", data)
   const userfname = data.fName;
   const userlname = data.lName;
   const userrole = data.role;
   const useremail = data.emailId;
   const userstatus = data.status;
   const userPassword = data.password;
-  // console.log(userfname, userlname, userrole, useremail, userstatus);
   const [firstName, setFirstName] = useState(userfname);
   const [lastName, setLastName] = useState(userlname);
   const [role, setRole] = useState(userrole);
   const [email, setEmail] = useState(useremail);
   const [status, setStatus] = useState(userstatus);
   const [password, setPassword] = useState(userPassword);
-  // console.log(
-  //   "after updating",
-  //   firstName,
-  //   lastName,
-  //   role,
-  //   email,
-  //   status,
-  //   password
-  // );
 
   useEffect(() => {
     setFirstName(userfname);
@@ -52,7 +38,6 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
       email: email,
       status: status,
     };
-    console.log(data);
     if (
       firstName === "" ||
       lastName === "" ||
@@ -64,8 +49,6 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
       alert("Please fill all the fields");
       return;
     }
-
-    //for local
     fetch("http://localhost:3000/api/updateUser", {
       method: "POST",
       body: JSON.stringify(data),
@@ -74,7 +57,6 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
       },
     })
       .then((response) => {
-        console.log(response);
         toast.success("User updated!", {
           position: "top-right",
           autoClose: 5000,
@@ -93,8 +75,7 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((error) =>{
-        console.log(error);
+      .then((error) => {
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
@@ -106,38 +87,15 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
           theme: "dark",
         });
       });
-
-
-    //for vercel
-    // fetch("https://iiit-events-portal.vercel.app/api/updateUser", {
-    //   method: "POST",
-    //   body: JSON.stringify(data),
-    //   headers: {
-    //     "Content-type": "application/json; charset=UTF-8",
-    //   },
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     setFirstName("");
-    //     setLastName("");
-    //     setPassword("");
-    //     setEmail("");
-    //     setStatus("active");
-    //     setRole("admin");
-    //     handleCLick();
-    //   })
-    //   .then((json) => console.log(json));
   };
 
   const handleDelete = () => {
     const formdata = new FormData();
 
     formdata.append("email", email);
-    //for local
     fetch("http://localhost:3000/api/deleteUser", {
       method: "POST",
       body: formdata,
-      
     })
       .then((response) => {
         toast.success("User deleted!", {
@@ -150,7 +108,6 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
           progress: undefined,
           theme: "dark",
         });
-        console.log(response);
         setFirstName("");
         setLastName("");
         setPassword("");
@@ -159,8 +116,7 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((erorr) =>{
-        console.log(erorr);
+      .then((erorr) => {
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
@@ -172,27 +128,8 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
           theme: "dark",
         });
       });
-
-    //for vercel
-
-    // fetch("https://iiit-events-portal.vercel.app/api/deleteUser", {
-    //   method: "POST",
-    //   body: formdata,
-      
-    // })
-    //   .then((response) => {
-    //     console.log(response);
-    //     setFirstName("");
-    //     setLastName("");
-    //     setPassword("");
-    //     setEmail("");
-    //     setStatus("active");
-    //     setRole("admin");
-    //     handleCLick();
-    //   })
-    //   .then((json) => console.log(json));
   };
-  
+
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200">
       <div className=" flex justify-center items-center">
@@ -275,7 +212,6 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
 
               <label className="text-black w-3/5">Password</label>
               <div className="flex w-3/5 gap-x-2">
-
                 <input
                   className="p-1 rounded-md w-full"
                   type={showPassword ? "text" : "password"}
@@ -286,7 +222,12 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
                   }}
                 />
                 <button onClick={(e) => setShowPassword(!showPassword)}>
-                  <Image src={showPassword ? "/view.png" : "/not-view.png"} height={25} width={30} alt="showPassword" />
+                  <Image
+                    src={showPassword ? "/view.png" : "/not-view.png"}
+                    height={25}
+                    width={30}
+                    alt="showPassword"
+                  />
                 </button>
               </div>
 

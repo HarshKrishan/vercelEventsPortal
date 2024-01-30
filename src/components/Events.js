@@ -1,7 +1,13 @@
-import React from 'react'
-import EventTableRow from './EventTableRow'
-function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTrue, setEventDataToUpdate,setShowDateRange,showDateRange,handleDownloadButton}) {
-    // console.log(events)
+import React from "react";
+import EventTableRow from "./EventTableRow";
+function Events({
+  events,
+  markShowEventTrue,
+  setEventDataToShow,
+  markUpdateEventTrue,
+  setEventDataToUpdate,
+  handleDownloadButton,
+}) {
   return (
     <div className="h-[28rem] mt-20">
       <div className="w-full flex justify-center h-100dvh overflow-y-auto">
@@ -29,7 +35,6 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
             ) : (
               events.map((event, index) => (
                 <EventTableRow
-                  //for local sql
                   key={event.eventId}
                   eventId={event.eventId}
                   id={index + 1}
@@ -42,12 +47,7 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
                       month: "long",
                     });
                     const day = date.getDate();
-                    const hours = date.getHours();
-                    const minutes = date.getMinutes();
-                    const seconds = date.getSeconds();
-
                     const formattedDate = `${month} ${day}, ${year}`;
-
                     return formattedDate;
                   })()}
                   organiser={event.eOrgEmail}
@@ -58,33 +58,6 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
                   setEventDataToShow={setEventDataToShow}
                   markUpdateEventTrue={markUpdateEventTrue}
                   setEventDataToUpdate={setEventDataToUpdate}
-                  //for vercel sql
-                  // key={event.eventid}
-                  // eventId={event.eventid}
-                  // id={index + 1}
-                  // name={event.ename}
-                  // date={(() => {
-                  //   const date = new Date(event.edate);
-
-                  //   const year = date.getFullYear();
-                  //   const month = date.toLocaleString("en-US", {
-                  //     month: "long",
-                  //   });
-                  //   const day = date.getDate();
-                  //   const hours = date.getHours();
-                  //   const minutes = date.getMinutes();
-                  //   const seconds = date.getSeconds();
-
-                  //   const formattedDate = `${month} ${day}, ${year}`;
-
-                  //   return formattedDate;
-                  // }
-                  // )
-                  // ()}
-                  // organiser={event.eorgemail}
-                  // fundedBy={event.fundedby}
-                  // fund={event.fund}
-                  // link={event.links}
                 />
               ))
             )}
@@ -105,4 +78,4 @@ function Events({events,markShowEventTrue,setEventDataToShow, markUpdateEventTru
   );
 }
 
-export default Events
+export default Events;

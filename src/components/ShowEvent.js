@@ -4,29 +4,47 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-
 const ShowEvent = ({ visible, handleCLick, data }) => {
-  // bg-black  bg-opacity-20 backdrop-blur-sm
-  const [images, setImages] = useState([]);
+  const [files, setFiles] = useState([]);
 
-  const [uploadedImages, setUploadedImages] = useState([]);
-  
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+
   const handleSubmit = () => {
     const formdata = new FormData();
-    for (let i = 0; i < images.length; i++) {
-      formdata.append("image[]", images[i]);
+    for (let i = 0; i < files.length; i++) {
+      formdata.append("files[]", files[i]);
     }
     formdata.append("eventId", data.eventId);
-    console.log("data_id", data.eventId);
     formdata.append("eventName", data.name);
-    fetch("http://localhost:3000/api/addEventImages", {
+    formdata.append("eventDate",data.date);
+    fetch("http://localhost:3000/api/addEventFiles", {
       method: "POST",
       body: formdata,
     })
       .then((response) => {
-        console.log(response);
+        toast.success("Files uploaded successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          theme: "dark",
+          progress: undefined,
+        });
       })
-      .then((json) => console.log(json));
+      .catch((err) => {
+        toast.error("Error uploading files", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          theme: "dark",
+          draggable: true,
+          progress: undefined,
+        });
+      });
   };
 
   const handleDelete = () => {
@@ -38,7 +56,6 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
       body: formdata,
     })
       .then((response) => {
-        console.log(response);
         toast.success("Event deleted successfully", {
           position: "top-right",
           autoClose: 5000,
@@ -52,7 +69,6 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
         handleCLick();
       })
       .catch((err) => {
-        console.log(err);
         toast.error("Error deleting event", {
           position: "top-right",
           autoClose: 5000,
@@ -64,33 +80,14 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
           progress: undefined,
         });
       });
-
-    // handleCLick();
   };
 
   useEffect(() => {
-    //for local
-    // fetch("http://localhost:3000/api/getEventImages", {
-    //   method: "POST",
-    //   body: JSON.stringify({
-    //     eventId: data.eventId,
-    //   }),
-    // })
-    //   .then(async (response) => await  response.json())
-    //   .then((json) => {
-    //     console.log(json);
-    //     setUploadedImages(json);
-    //   });
-
-    //for vercel
-
     if (visible) {
       const sentdata = {
-        eventId: 1,
-        eventName: data.name,
-      }
-      // for local
-      fetch("http://localhost:3000/api/getEventImages", {
+        uri: data.name+data.date,
+      };
+      fetch("http://localhost:3000/api/getEventFiles", {
         method: "POST",
         body: JSON.stringify(sentdata),
         headers: {
@@ -101,51 +98,20 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
           if (!response.ok) {
             throw new Error(`HTTP error! Status: ${response.status}`);
           }
-          return response.json(); 
+          return response.json();
         })
         .then((jsonData) => {
-          // console.log(jsonData);
-          setUploadedImages(jsonData.result);
+          setUploadedFiles(jsonData.result);
         })
         .catch((error) => {
-          console.error("Error:", error);
+          // console.error("Error:", error);
         });
+    }
+  }, [uploadedFiles, visible]);
 
-      //for vercel
-    //   fetch("https://iiit-events-portal.vercel.app/api/getEventImages", {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       eventId: data.eventId,
-    //     }),
-    //     headers: {
-    //       "Content-Type": "application/json; charset=UTF-8",
-    //     },
-    //   })
-    //     .then((response) => {
-    //       if (!response.ok) {
-    //         throw new Error(`HTTP error! Status: ${response.status}`);
-    //       }
-    //       return response.json();
-    //     })
-    //     .then((json) => {
-    //       console.log(json);
-    //       setUploadedImages(json);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Fetch error:", error);
-    //     });
-    
-  } }
-  , [uploadedImages, visible]);
-
-  if (!visible){
-    // setUploadedImages([]);
+  if (!visible) {
     return null;
   }
-
-  
-  // console.log("uploadedImages", uploadedImages);
-  // const imagesToShow = uploadedImages;
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-y-auto">
       <div className=" flex justify-center items-center">
@@ -169,15 +135,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
 
           <div className="mt-5 overflow-auto">
             <p className="">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis
-              officia quidem itaque officiis sapiente aliquid, perspiciatis,
-              maxime nulla laboriosam quisquam tempore quod laudantium esse, aut
-              id tempora quasi ullam culpa odit explicabo harum accusamus
-              provident sit doloribus! At quo illum obcaecati praesentium magnam
-              sed similique veniam placeat a, aut officia saepe molestiae
-              dolorem facere neque officiis ut cum? Mollitia sunt, corporis
-              inventore possimus accusamus earum labore nesciunt atque ipsam at
-              similique aperiam. Error, quibusdam repellendus.
+              {data.description}
             </p>
             <ul className="mt-5">
               <li className="my-1 font-semibold">
@@ -200,82 +158,56 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
               </li>
             </ul>
             <div className="mt-5">
-              <h1 className=" font-bold text-xl">Event Images</h1>
+              <h1 className=" font-bold text-xl">Event Files</h1>
               <label
                 htmlFor="uploadFile"
                 className="mt-3 rounded-md w-3/5 cursor-pointer"
               >
-                {" "}
                 <span>
                   <Image
-                    src="https://img.icons8.com/color/48/add-image.png"
+                    src="/upload.png"
                     height={25}
                     width={30}
                     alt="add"
                     className="inline-block mr-3"
                   />
                 </span>
-                Upload Images
+                Upload Files
               </label>
               <input
                 className="m-2 rounded-md p-1 w-3/5 hidden"
                 type="file"
                 id="uploadFile"
-                placeholder="Event Image"
+                placeholder="Event Files"
                 multiple={true}
                 onChange={async (e) => {
-                  setImages(e.target.files);
+                  setFiles(e.target.files);
                   await handleSubmit();
                 }}
               />
             </div>
           </div>
           <div className="flex flex-nowrap">
-            {uploadedImages.map((image, index) => (
-              <div className="m-2" key={image + index}>
-                {/* <Image
-                src={`/uploads/${data.name}/${image}`}
-                height={200}
-                width={200}
-                alt="event image"
-              /> */}
-                <a
-                  
-                  href={`/uploads/${data.name}/${image}`}
-                  target="_blank"
-                >
-
-                  {
-                    image.split(".")[1] === "pdf" ? 
+            {uploadedFiles.map((file, index) => (
+              <div className="m-2" key={file + index}>
+                <a href={`/uploads/${data.name+data.date}/${file}`} target="_blank">
+                  {file.split(".")[1] === "pdf" ? (
                     <Image
-                    src="/pdf.png"
-                    height={150}
-                    width={150}
-                    alt="event pdf"
-                    className="object-fit hover:cursor-pointer hover:opacity-50"
-                  />
-                  :
-                  <Image
-                  src={`/uploads/${data.name}/${image}`}
-                  height={200}
-                  width={200}
-                  alt="event image"
-                  className="object-fit hover:cursor-pointer hover:opacity-50"
-                />
-
-                  }
-                  {/* <object
-                    data={`/uploads/${data.name}/${image}`}
-                    width="200px"
-                    height="200px"
-                    className="object-fit hover:cursor-pointer hover:opacity-50"
-                    frameBorder="0"
-                    onhover="cursor:pointer opacity-50"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      window.open(`/uploads/${data.name}/${image}`, "_blank");
-                    }}
-                  ></object> */}
+                      src="/pdf.png"
+                      height={150}
+                      width={150}
+                      alt="event pdf"
+                      className="object-fit hover:cursor-pointer hover:opacity-50"
+                    />
+                  ) : (
+                    <Image
+                      src={`/uploads/${data.name+data.date}/${file}`}
+                      height={200}
+                      width={200}
+                      alt="event image"
+                      className="object-fit hover:cursor-pointer hover:opacity-50"
+                    />
+                  )}
                 </a>
               </div>
             ))}

@@ -1,12 +1,11 @@
 import NextAuth from "next-auth";
 import CrediantialsProvider from "next-auth/providers/credentials";
-import { createClient } from "@vercel/postgres";
 import connectSql, { connection } from "@/app/api/connectDb/route";
 const authOptions = {
   session: {
     strategy: "jwt",
   },
-  pages:{
+  pages: {
     signIn: "/login",
   },
   providers: [
@@ -17,26 +16,20 @@ const authOptions = {
         password: {},
       },
       async authorize(credentials, req) {
-
-        //for local sql
-        // console.log(credentials)
         connectSql();
         const rows = await connection
           .promise()
           .query(`SELECT * FROM users WHERE emailId='${credentials.email}'`)
           .then(([data, fields]) => {
-            // console.log(data);
             return data;
           })
           .catch((err) => {
-            console.log(err);
+            return null;
           });
-        // console.log(rows);
-        const user = rows[0];
-        // console.log("user",user)
-        if (user && user.pwd === credentials.password) {
-          // console.log("user found")
 
+        const user = rows[0];
+
+        if (user && user.pwd === credentials.password) {
           return {
             fname: user.fName,
             lname: user.lName,
@@ -46,45 +39,11 @@ const authOptions = {
           };
         }
         return null;
-
-        //for vercel sql
-
-        // try {
-
-        //   const client = createClient();
-        //   await client.connect();
-
-        //   const {rows,fields} = await client.sql`select * from users where emailid=${credentials.email};`;
-
-        //   // const response =
-        //   //   await sql`SELECT * FROM users WHERE emailid = '${credentials.email}'`;
-        //   const user = rows[0];
-        //   // console.log(user)
-        //   if (user && user.pwd === credentials.password) {
-        //     // console.log("user found");
-
-        //     return {
-        //       fname: user.fname,
-        //       lname: user.lname,
-        //       email: user.emailid,
-        //       role: user.role,
-        //       status: user.status,
-        //     };
-        //   }
-        //   return null;
-          
-        // } catch (error) {
-        //   console.log(error,"authentication error")
-        //   return null;
-        // }
-        
       },
     }),
   ],
   callbacks: {
-    async jwt({token, user, session}) {
-    //   console.log(user);
-      //passing user info to token
+    async jwt({ token, user, session }) {
       if (user) {
         return {
           ...token,
@@ -93,8 +52,7 @@ const authOptions = {
       }
       return token;
     },
-    async session({session, token, user}) {
-      //   session.user = token.user;
+    async session({ session, token, user }) {
       return {
         ...session,
         user: token.user,

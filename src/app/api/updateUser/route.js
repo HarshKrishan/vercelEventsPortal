@@ -1,71 +1,31 @@
-import { revalidatePath } from "next/cache";
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
-import { createClient } from "@vercel/postgres";
-import { getServerSession } from "next-auth";
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-export const cache = "no-store";
-export async function POST(req) {
-  console.log("entering addUser route");
 
+import { getServerSession } from "next-auth";
+
+export async function POST(req) {
   const session = await getServerSession({ req });
   if (!session) {
     return;
   }
-  // console.log(req);
+
   const { firstName, lastName, password, role, email, status } =
     await req.json();
 
-  // console.log(
-  //   "Got this....",
-  //   firstName,
-  //   lastName,
-  //   password,
-  //   role,
-  //   email,
-  //   status
-  // );
-
-
-  //for local sql
   connectSql();
   const query = `update users set fName='${firstName}',lName = '${lastName}', pwd='${password}',role= '${role}',status='${status}' where emailId='${email}'`;
   const res = await connection
     .promise()
     .query(query)
     .then(([data, fields]) => {
-      // console.log(data);
       return data;
     })
     .catch((err) => {
-      console.log(err);
       return NextResponse.json(
         { result: "Error updating User..." },
         { status: 500 }
       );
     });
-    // revalidatePath("/manageUsers")
+
   return NextResponse.json({ result: res }, { status: 200 });
-
-
-
-  //for vercel sql
-
-  // const client = createClient();
-  // await client.connect();
-
-  // try {
-  //   const { res, fields } =
-  //     await client.sql`update users set fname=${firstName},lname = ${lastName}, pwd=${password},role= ${role},status=${status} where emailid=${email}`;
-
-  //   return NextResponse.json({ result: res }, { status: 200 });
-  // } catch (e) {
-  //   console.log("error updating user", e);
-  // } finally {
-  //   await client.end();
-  // }
-  // revalidatePath("https://iiit-events-portal.vercel.app/manageUsers");
-  // return NextResponse.json({ result: "Error updating User..." }, { status: 500 });
-
 }

@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import ReactLoading from 'react-loading';
-export default function Loading (){
+import ReactLoading from "react-loading";
+export default function Loading() {
   return (
     <div className="flex justify-center items-center z-10 h-screen w-screen">
       <ReactLoading
@@ -14,4 +14,3 @@ export default function Loading (){
     </div>
   );
 }
-

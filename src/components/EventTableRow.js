@@ -1,15 +1,12 @@
-import React from 'react'
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
 function EventTableRow(props) {
-    const {eventId,id,name,date,organiser,fundedBy,fund,link}=props;
-    const oddClass = "border-r-4 border-b-2 border-slate-300";
-    const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300";
+  const { eventId, id, name, date, organiser, fundedBy, fund, link } = props;
+  const oddClass = "border-r-4 border-b-2 border-slate-300";
+  const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300";
 
-    const {markShowEventTrue} = props;
-    const {markUpdateEventTrue} = props;
-    // console.log("key....",key);
-    // console.log(id,name,date,organiser,fundedBy,fund,link);
-  // console.log("name ",name,"id: ",eventId);
+  const { markShowEventTrue } = props;
+  const { markUpdateEventTrue } = props;
   return (
     <tr key={id}>
       <td className={id % 2 === 0 ? evenClass : oddClass}>
@@ -22,7 +19,7 @@ function EventTableRow(props) {
         <div className="flex justify-center">{date}</div>
       </td>
       <td className={id % 2 === 0 ? evenClass : oddClass}>
-        <div className='flex justify-center'>{organiser}</div>
+        <div className="flex justify-center">{organiser}</div>
       </td>
       <td className={id % 2 === 0 ? evenClass : oddClass}>
         <div
@@ -43,19 +40,19 @@ function EventTableRow(props) {
         </div>
       </td>
       <td className={id % 2 === 0 ? evenClass : oddClass}>
-        <div className="flex justify-center hover:cursor-pointer"
-        onClick={()=>{
-          // console.log("sending this data to update",eventId,name,date,organiser,fundedBy,fund,link );
-         markUpdateEventTrue({
-            eventId,
-            name,
-            date,
-            organiser,
-            fundedBy,
-            fund,
-            link,
-          }); 
-        }}
+        <div
+          className="flex justify-center hover:cursor-pointer"
+          onClick={() => {
+            markUpdateEventTrue({
+              eventId,
+              name,
+              date,
+              organiser,
+              fundedBy,
+              fund,
+              link,
+            });
+          }}
         >
           <Image src="settings.svg" height={25} width={30} alt="setting" />
         </div>
@@ -64,4 +61,4 @@ function EventTableRow(props) {
   );
 }
 
-export default EventTableRow
+export default EventTableRow;
