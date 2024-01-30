@@ -23,7 +23,7 @@ export async function POST(req) {
             }
           );
           const data = await response.json();
-          console.log("data", data);
+          // console.log("data", data);
           if (!data.success) {
             return NextResponse.json(
               { result: "Invalid captcha token" },
