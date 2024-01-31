@@ -6,8 +6,34 @@ import ShowEvent from "@/components/ShowEvent";
 import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
 import UpdateEvent from "@/components/UpdateEvent";
 import Events from "@/components/Events";
+import { getSession } from "next-auth/react";
 
 function Page() {
+
+  const [currentUser, setCurrentUser] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    role: "",
+    status: "",
+  });
+  const session = async () => {
+    const curr = await getSession();
+    const { fname, lname, email, role, status } = curr.user;
+
+    setCurrentUser({
+      fname: fname,
+      lname: lname,
+      email: email,
+      role: role,
+      status: status,
+    });
+  };
+  useEffect(() => {
+    session();
+  }, []);
+
+  
   const [visible, setVisible] = useState(false);
 
   const [date, setDate] = useState({
@@ -25,6 +51,8 @@ function Page() {
       fetch("http://localhost:3000/api/getEventByDateRange", {
         method: "POST",
         body: JSON.stringify({
+          email: currentUser.email,
+          role: currentUser.role,
           startDate: date.from,
           endDate: date.to,
         }),
@@ -156,6 +184,8 @@ function Page() {
     fetch("http://localhost:3000/api/getEventByDateRange", {
       method: "POST",
       body: JSON.stringify({
+        email: currentUser.email,
+        role: currentUser.role,
         startDate: date.from,
         endDate: date.to,
       }),
@@ -163,7 +193,8 @@ function Page() {
       .then((res) => res.json())
       .then((json) => {
         setEvents(json.result);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         // console.log(err);
       });
   }, [visible, visibleShowEvent, visibleUpdateEvent]);

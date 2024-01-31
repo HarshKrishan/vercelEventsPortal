@@ -1,7 +1,6 @@
 import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getSession } from "next-auth/react";
 export async function POST(req) {
   const session = await getServerSession();
   if (!session) {
@@ -9,10 +8,10 @@ export async function POST(req) {
   }
   
 
-  const {emailId} = session;
+  
 
-  let { startDate, endDate } = await req.json();
-
+  let { startDate, endDate,email,role } = await req.json();
+  
   startDate = new Date(startDate);
   endDate = new Date(endDate);
 
@@ -41,17 +40,17 @@ export async function POST(req) {
 
   const queryForAdmin = `SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' order by eDate;`;
 
-  const queryForCoAdmin = `SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' and Users_emailId = '${emailId}' order by eDate;`;
+  const queryForCoAdmin = `SELECT * FROM events where DATE(eDate) between '${startDate}' and '${endDate}' and Users_emailId = '${email}' order by eDate;`;
 
   const events = await connection
     .promise()
     .query(role == "admin" ? queryForAdmin : queryForCoAdmin)
     .then(([data, fields]) => {
-      console.log(data)
+
       return data;
     })
     .catch((err) => {
-      console.log(err);
+
       return NextResponse.json(
         { result: "Error getting events" },
         { status: 500 }
