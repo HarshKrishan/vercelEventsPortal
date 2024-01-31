@@ -46,7 +46,7 @@ function TopNavbar({ children }) {
                 <h1 className="text-2xl font-bold  text-white">IIITD</h1>
                 <h1 className="text-2xl mb-2 text-white">{logo}</h1>
               </div>
-              <div className="p-3">
+              <div className="p-3 ">
                 <div className="flex justify-start">
                   <Image
                     className="mt-3 mb-10 ml-1"
@@ -55,12 +55,12 @@ function TopNavbar({ children }) {
                     height={38}
                     alt="user"
                   />
-                  <h1 className="mt-5 ml-4 font-bold text-xl text-white">
-                    {show
-                      ? currentUser.role === "admin"
-                        ? "Admin"
-                        : "Co-Admin"
-                      : ""}
+                  <h1
+                    className={`mt-5 ml-4 font-bold text-xl text-white ${
+                      show ? "" : "hidden"
+                    }`}
+                  >
+                    {currentUser.role === "admin" ? "Admin" : "Co-Admin"}
                   </h1>
                 </div>
                 <Link
@@ -75,7 +75,11 @@ function TopNavbar({ children }) {
                     alt="dashboard"
                     layout="fixed"
                   />
-                  <h2 className=" ml-4 pl-1 mt-3 font-semibold text-xl text-white">
+                  <h2
+                    className={` ml-4 pl-1 mt-3 font-semibold text-xl text-white ${
+                      show ? "" : "hidden"
+                    }`}
+                  >
                     Dashboard
                   </h2>
                 </Link>
@@ -93,28 +97,36 @@ function TopNavbar({ children }) {
                         alt="employee"
                         layout="fixed"
                       />
-                      <h2 className=" ml-3 pl-1 font-semibold text-xl text-white">
+                      <h2
+                        className={`ml-1 font-semibold text-xl text-white ${
+                          show ? "" : "hidden"
+                        }`}
+                      >
                         Manage Users
                       </h2>
                     </Link>
                   </div>
 
-                  <div>
+                  <div className="bottom-0 absolute mb-10 ml-1">
                     <button
                       onClick={() => {
                         signOut({ callbackUrl: "http://localhost:3000/login" });
                       }}
                       className=""
                     >
-                      <div className="bottom-0 absolute mb-10 ml-1 flex overflow-hidden hover:shadow-md hover:bg-slate-700 ">
+                      <div className=" flex hover:shadow-md hover:bg-slate-700 ">
                         <Image
                           src="https://img.icons8.com/external-anggara-basic-outline-anggara-putra/24/external-logout-social-media-interface-anggara-basic-outline-anggara-putra.png"
                           width={34}
                           height={34}
                           alt="logout"
                         />
-                        <h2 className="ml-5 pl-1 font-semibold text-xl text-white">
-                          {show ? "Log out" : " "}
+                        <h2
+                          className={`ml-5 pl-1 font-semibold text-xl text-white ${
+                            show ? "" : "hidden"
+                          }`}
+                        >
+                          Log out
                         </h2>
                       </div>
                     </button>
@@ -182,12 +194,12 @@ function TopNavbar({ children }) {
                     height={38}
                     alt="user"
                   />
-                  <h1 className="mt-5 ml-4 font-bold text-xl text-white">
-                    {show
-                      ? currentUser.role === "admin"
-                        ? "Admin"
-                        : "Co-Admin"
-                      : ""}
+                  <h1
+                    className={`mt-5 ml-4 font-bold text-xl text-white ${
+                      show ? "" : "hidden"
+                    }`}
+                  >
+                    {currentUser.role === "admin" ? "Admin" : "Co-Admin"}
                   </h1>
                 </div>
                 <Link
@@ -202,7 +214,11 @@ function TopNavbar({ children }) {
                     alt="dashboard"
                     layout="fixed"
                   />
-                  <h2 className=" ml-4 pl-1 mt-3 font-semibold text-xl text-white">
+                  <h2
+                    className={`ml-4 pl-1 mt-3 font-semibold text-xl text-white ${
+                      show ? "" : "hidden"
+                    }`}
+                  >
                     Dashboard
                   </h2>
                 </Link>
