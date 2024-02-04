@@ -8,7 +8,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
   const [files, setFiles] = useState([]);
 
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
+  const [speakers, setSpeakers] = useState([]);
   const handleSubmit = () => {
     const formdata = new FormData();
     for (let i = 0; i < files.length; i++) {
@@ -109,7 +109,48 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
     }
   }, [uploadedFiles, visible]);
 
+
+
+  useEffect(() => {
+
+    if(visible){
+      
+
+        const speaker_Id = data.speaker_id;
+        fetch("http://localhost:3000/api/getSpeakers", {
+          method: "POST",
+          body: JSON.stringify({speaker_Id}),
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+          },
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        }).then((data) => {
+
+
+        setSpeakers(data.result);
+
+        }).catch((error) => {
+          console.error("Error:", error);
+        });
+      
+
+      
+
+    }else{
+      setSpeakers([]);
+      setUploadedFiles([]);
+    }
+    
+    
+  }, [visible])
+  
+
   if (!visible) {
+    
     return null;
   }
   return (
@@ -134,18 +175,36 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
           </div>
 
           <div className="mt-5 overflow-auto">
-            <p className="">
-              {data.description}
-            </p>
+            <h2 className="my-1 font-semibold">Description</h2>
+            <p className="">{data.description}</p>
             <ul className="mt-5">
               <li className="my-1 font-semibold">
                 Event Date: <span className="font-normal">{data.date}</span>
+              </li>
+              <li className="my-1 font-semibold">
+                Event Time: <span className="font-normal">{data.eTime}</span>
               </li>
 
               <li className="my-1 font-semibold">
                 Event Organiser:{" "}
                 <span className="font-normal">{data.organiser}</span>
               </li>
+              <li className="my-1 font-semibold">
+                No. of Partipants:{" "}
+                <span className="font-normal">{data.numParticipants}</span>
+              </li>
+              <li className="my-1 font-semibold">
+                Speakers:{" "}
+                <span className="font-normal">
+                  { speakers &&
+                    speakers.map((speaker,index) => (
+                    <p key={index}>{speaker.title+" "+speaker.affiliation}</p>
+                  ))}
+                </span>
+
+
+              </li>
+
               <li className="my-1 font-semibold">
                 Event Funded By:{" "}
                 <span className="font-normal">{data.fundedBy}</span>
@@ -190,7 +249,10 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
           <div className="flex flex-nowrap">
             {uploadedFiles.map((file, index) => (
               <div className="m-2" key={file + index}>
-                <a href={`/uploads/${data.name+data.date}/${file}`} target="_blank">
+                <a
+                  href={`/uploads/${data.name + data.date}/${file}`}
+                  target="_blank"
+                >
                   {file.split(".")[1] === "pdf" ? (
                     <Image
                       src="/pdf.png"
@@ -201,7 +263,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
                     />
                   ) : (
                     <Image
-                      src={`/uploads/${data.name+data.date}/${file}`}
+                      src={`/uploads/${data.name + data.date}/${file}`}
                       height={200}
                       width={200}
                       alt="event image"

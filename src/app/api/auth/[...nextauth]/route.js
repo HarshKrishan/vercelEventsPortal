@@ -21,6 +21,7 @@ const authOptions = {
           .promise()
           .query(`SELECT * FROM users WHERE emailId='${credentials.email}'`)
           .then(([data, fields]) => {
+            if(data.length === 0) return null;
             return data;
           })
           .catch((err) => {

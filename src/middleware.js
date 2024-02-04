@@ -8,7 +8,9 @@ export function middleware(request) {
     request.nextUrl.pathname.startsWith("/api/resetPassword") ||
     request.nextUrl.pathname.startsWith("/api/verifyToken") ||
     request.nextUrl.pathname.startsWith("/api/getEventByDateRange") ||
-    request.nextUrl.pathname.startsWith("/api/verifyCaptchaToken")
+    request.nextUrl.pathname.startsWith("/api/verifyCaptchaToken") ||
+    request.nextUrl.pathname.startsWith("/api/getSpeakers") ||
+    request.nextUrl.pathname.startsWith("/api/updateEvent")
   ) {
     return;
   }

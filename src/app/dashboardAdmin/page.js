@@ -74,9 +74,11 @@ function Page() {
     description: "",
     organiser: "",
     link: "",
-    image: [],
     fundedBy: "",
     fund: "",
+    eTime:"",
+    numParticipants:"",
+    speaker_id:"",
   });
 
   const handleCLickShowEvent = () => {
@@ -87,9 +89,11 @@ function Page() {
       description: "",
       organiser: "",
       link: "",
-      image: [],
       fundedBy: "",
       fund: "",
+      eTime: "",
+      numParticipants: "",
+      speaker_id: "",
     });
     setVisibleShowEvent(false);
   };
@@ -97,28 +101,32 @@ function Page() {
   const [visibleUpdateEvent, setVisibleUpdateEvent] = useState(false);
 
   const [eventDataToUpdate, setEventDataToUpdate] = useState({
-    EventId: "",
-    Name: "",
-    Date: "",
-    Description: "",
-    Organiser: "",
-    Link: "",
-    Image: [],
-    FundedBy: "",
-    Fund: "",
+    eventId: "",
+    name: "",
+    date: "",
+    description: "",
+    organiser: "",
+    link: "",
+    fundedBy: "",
+    fund: "",
+    eTime: "",
+    numParticipants: "",
+    speaker_id: "",
   });
 
   const handleCLickUpdateEvent = () => {
     setEventDataToUpdate({
-      EventId: "",
-      Name: "",
-      Date: "",
-      Description: "",
-      Organiser: "",
-      Link: "",
-      Image: [],
-      FundedBy: "",
-      Fund: "",
+      eventId: "",
+      name: "",
+      date: "",
+      description: "",
+      organiser: "",
+      link: "",
+      fundedBy: "",
+      fund: "",
+      eTime: "",
+      numParticipants: "",
+      speaker_id: "",
     });
     setVisibleUpdateEvent(false);
   };
@@ -130,9 +138,11 @@ function Page() {
     description,
     organiser,
     link,
-    image,
     fundedBy,
     fund,
+    eTime,
+    numParticipants,
+    speaker_id,
   }) => {
     setEventDataToShow({
       eventId,
@@ -141,10 +151,14 @@ function Page() {
       description,
       organiser,
       link,
-      image,
       fundedBy,
       fund,
+      eTime,
+      numParticipants,
+      speaker_id,
     });
+
+    
     setVisibleShowEvent(true);
   };
 
@@ -155,22 +169,25 @@ function Page() {
     description,
     organiser,
     link,
-    image,
     fundedBy,
     fund,
+    eTime,
+    numParticipants,
+    speaker_id
   }) => {
-    const event = {
+    setEventDataToUpdate({
       eventId,
       name,
       date,
       description,
       organiser,
       link,
-      image,
       fundedBy,
       fund,
-    };
-    setEventDataToUpdate(event);
+      eTime,
+      numParticipants,
+      speaker_id
+    });
     setVisibleUpdateEvent(true);
   };
 

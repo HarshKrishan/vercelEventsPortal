@@ -21,6 +21,7 @@ export default function Form({ siteKey }) {
   const handleLogin = async () => {
     if (!isValidEmail(email)) {
       alert("Invalid Email");
+      captchaRef.current.reset();
       return;
     }
 
@@ -43,10 +44,11 @@ export default function Form({ siteKey }) {
 
     if (data.result !== "Token verified") {
       toast.error(data.result);
+      captchaRef.current.reset();
       return;
     }
 
-    toast.success("Captcha verified, logging in...");
+    
 
     const response = await signIn("credentials", {
       email: email,
@@ -56,7 +58,9 @@ export default function Form({ siteKey }) {
     }).then((res) => {
       if (res.error) {
         alert("Wrong Credentials");
+        captchaRef.current.reset();
       } else {
+        toast.success("Captcha verified, logging in...");
         captchaRef.current.reset();
         router.push("/dashboardAdmin");
       }

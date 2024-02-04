@@ -54,6 +54,10 @@ function Events({
                   fundedBy={event.fundedBy}
                   fund={event.fund}
                   link={event.links}
+                  eTime={event.eTime}
+                  numParticipants={event.numParticipants}
+                  description={event.description}
+                  speaker_id={event.speaker_Id}
                   markShowEventTrue={markShowEventTrue}
                   setEventDataToShow={setEventDataToShow}
                   markUpdateEventTrue={markUpdateEventTrue}

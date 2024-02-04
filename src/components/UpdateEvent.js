@@ -1,22 +1,75 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
+import CustomInput from "./CustomInput";
 
 const UpdateEvent = ({ visible, handleCLick, data }) => {
   const router = useRouter();
+
+  const eventId = data.eventId;
+  const name = data.name;
+  const date = data.date;
+  const organiser = data.organiser;
+  const link = data.link;
+  const fundedBy = data.fundedBy;
+  const fund = data.fund;
+  const numParticipants = data.numParticipants;
+  const eTime = data.eTime;
+  const description = data.description;
+  const speaker_id = data.speaker_id;
+
+  function formatDateToMDN(dt) {
+    const date = new Date(dt);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
   const [event, setEvent] = useState({
-    eventId: data.eventId,
-    name: data.name,
-    date: data.date,
-    description: data.description,
-    organiser: data.organiser,
-    link: data.link,
-    fundedBy: data.fundedBy,
-    fund: data.fund,
+    eventId:eventId,
+    name: name,
+    date: date,
+    organiser: organiser,
+    link: link,
+    fundedBy: fundedBy,
+    fund: fund,
+    numParticipants: numParticipants,
+    eTime: eTime,
+    description: description,
+    speaker_id: speaker_id,
+
   });
-  if (!visible) return null;
+  const [speakers, setSpeakers] = useState([]);
+
+  const addSpeaker = (title, affiliation) => {
+    setSpeakers([...speakers, { title, affiliation }]);
+  };
+
+  function handleDelete(index) {
+    const newSpeakers = speakers.filter((speaker, i) => i !== index);
+    setSpeakers(newSpeakers);
+  }
+  useEffect(() => {
+    setEvent({
+      eventId:eventId,
+      name: name,
+      date: formatDateToMDN(date),
+      organiser: organiser,
+      link: link,
+      fundedBy: fundedBy,
+      fund: fund,
+      numParticipants: numParticipants,
+      eTime: eTime,
+      description: description,
+      speaker_id: speaker_id,
+
+    });
+    
+  }, [visible]);
+
+  
   const handleSubmit = async () => {
     const answer = window.confirm(
       "Are you sure you want to update this event?"
@@ -26,11 +79,17 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
     const formdata = new FormData();
     formdata.append("name", event.name);
     formdata.append("date", event.date);
-    formdata.append("description", event.description);
     formdata.append("organiser", event.organiser);
     formdata.append("link", event.link);
     formdata.append("fundedBy", event.fundedBy);
     formdata.append("fund", event.fund);
+    formdata.append("numParticipants", event.numParticipants);
+    formdata.append("eTime", event.eTime);
+    formdata.append("description", event.description);
+    formdata.append("eventId", event.eventId);
+    formdata.append("speaker_id", event.speaker_id);
+    formdata.append("speakers", JSON.stringify(speakers));
+
     fetch("http://localhost:3000/api/updateEvent", {
       method: "POST",
       body: formdata,
@@ -44,7 +103,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
           pauseOnHover: true,
           draggable: true,
           progress: undefined,
-          theme: "dark",
+          theme: "light",
         });
 
         handleCLick();
@@ -59,21 +118,54 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
           draggable: true,
           progress: undefined,
           theme: "light",
-          transition: Bounce,
         });
       });
     setEvent({
       eventId: "",
       name: "",
       date: "",
-      description: "",
       organiser: "",
       link: "",
       fundedBy: "",
       fund: "",
+      numParticipants: "",
+      eTime: "",
+      description: "",
+      speaker_id: "",
+
     });
   };
 
+
+  useEffect(() => {
+    if (visible) {
+      const speaker_Id = data.speaker_id;
+      fetch("http://localhost:3000/api/getSpeakers", {
+        method: "POST",
+        body: JSON.stringify({ speaker_Id }),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8",
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setSpeakers(data.result);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    } else {
+      setSpeakers([]);
+    }
+  }, [visible]);
+
+
+  if (!visible) return null;
   return (
     <div className="fixed inset-x-72 inset-y-5 bg-slate-200 overflow-auto">
       <div className=" flex justify-center items-center overflow-auto">
@@ -91,6 +183,7 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                 onChange={(e) => {
                   setEvent({ ...event, name: e.target.value });
                 }}
+                
               />
 
               <label className="text-black w-3/5">Event Date</label>
@@ -104,6 +197,18 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   setEvent({ ...event, date: e.target.value });
                 }}
               />
+
+              <label className="text-black w-3/5">Event Time</label>
+
+              <input
+                className="m-2 rounded-md p-1 w-3/5"
+                type="time"
+                placeholder="Event Time"
+                value={event.eTime}
+                onChange={(e) => {
+                  setEvent({ ...event, eTime: e.target.value });
+                }}
+              />
               <label className="text-black w-3/5">Event Description</label>
 
               <textarea
@@ -115,14 +220,14 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                   setEvent({ ...event, description: e.target.value });
                 }}
               />
-              {/* 
+              
               <CustomInput
                 speakers={speakers}
                 addSpeaker={addSpeaker}
                 handleDelete={handleDelete}
                 className="w-3/5"
-              /> */}
-              {/* <label className="text-black w-3/5">No. of Participants </label>
+              />
+              <label className="text-black w-3/5">No. of Participants </label>
 
               <input
                 className="m-2 rounded-md p-1 w-3/5"
@@ -130,14 +235,10 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                 placeholder="10"
                 value={event.numParticipants}
                 onChange={(e) => {
-                  // if (e.target.value < 0)
-                  //   setEvent({ ...event, numsParticipants: 0 });
-                  // else {
                     setEvent({ ...event, numsParticipants: e.target.value });
-                  // }
                 }}
                 min="0"
-              /> */}
+              />
               <label className="text-black w-3/5">Event Organiser</label>
 
               <input
@@ -201,7 +302,6 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
                       eventId: "",
                       name: "",
                       date: "",
-                      description: "",
                       organiser: "",
                       link: "",
                       fundedBy: "",

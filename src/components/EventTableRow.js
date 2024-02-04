@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 function EventTableRow(props) {
-  const { eventId, id, name, date, organiser, fundedBy, fund, link } = props;
+  const { eventId, id, name, date, organiser, fundedBy, fund, link, numParticipants, speaker_id,eTime, description } = props;
   const oddClass = "border-r-4 border-b-2 border-slate-300";
   const evenClass = "border-r-4 border-b-2 border-slate-300 bg-teal-300";
 
@@ -33,6 +33,10 @@ function EventTableRow(props) {
               fundedBy,
               fund,
               link,
+              numParticipants,
+              speaker_id,
+              eTime,
+              description,
             });
           }}
         >
@@ -51,6 +55,10 @@ function EventTableRow(props) {
               fundedBy,
               fund,
               link,
+              numParticipants,
+              speaker_id,
+              eTime,
+              description,
             });
           }}
         >
