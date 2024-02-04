@@ -59,7 +59,7 @@ const AddUser = ({ visible, handleCLick }) => {
         setStatus("active");
         setRole("admin");
       })
-      .then((error) => {
+      .catch((error) => {
         toast.error("error adding user!", {
           position: "top-right",
           autoClose: 5000,
