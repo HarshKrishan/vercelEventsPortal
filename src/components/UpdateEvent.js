@@ -95,7 +95,8 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
       body: formdata,
     })
       .then((response) => {
-        toast.success("Event update!", {
+        if(response.status === 200){
+        toast.success("Event updated!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
@@ -106,10 +107,24 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
           theme: "light",
         });
 
+        
+
+        }else{
+          toast.error("error updating event!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+        }
         handleCLick();
       })
       .catch((err) => {
-        toast.error("error updating event!", {
+        toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,

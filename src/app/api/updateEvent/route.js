@@ -26,12 +26,14 @@ export async function POST(req) {
 
     connectSql();
 
-    const query = `update events set name='${name}',date='${date}',organiser='${organiser}',link='${link}',fundedBy='${fundedBy}',fund='${fund}', description='${description}',numParticipants='${numParticipants}', eTime='${eTime}' where eventId='${eventId}'`;
+    const query = `update events set eName='${name}',eDate='${date}',eOrgEmail='${organiser}',links='${link}',fundedBy='${fundedBy}',fund='${fund}', description='${description}',numParticipants='${numParticipants}', eTime='${eTime}' where eventId='${eventId}'`;
 
     const res = await connection
       .promise()
       .query(query)
       .then(([data, fields]) => {
+
+
 
         const query2 = `delete from speakers where id='${speaker_Id}'`;
         connection.promise().query(query2).then(([data, fields]) => {
@@ -49,7 +51,7 @@ export async function POST(req) {
           });
         }).catch((err) => {
           return NextResponse.json(
-            { result: "Error updating speakers" },
+            { result: "Error deleting previous speakers" },
             { status: 500 }
           );
         }
