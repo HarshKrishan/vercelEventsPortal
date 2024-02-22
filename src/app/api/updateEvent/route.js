@@ -22,7 +22,7 @@ export async function POST(req) {
     const fund = data.get("fund");
     const numParticipants = data.get("numParticipants");
     const speakers = JSON.parse(data.get("speakers"));
-    const speaker_Id = data.get("speaker_Id");
+    const speaker_Id = data.get("speaker_id");
 
     connectSql();
 
