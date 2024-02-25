@@ -31,6 +31,7 @@ const authOptions = {
         const user = rows[0];
 
         if (user && user.pwd === credentials.password) {
+          if(user.status === "inactive") return null;
           return {
             fname: user.fName,
             lname: user.lName,
