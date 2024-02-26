@@ -57,11 +57,11 @@ export default function Form({ siteKey }) {
       callbackUrl: "/dashboardAdmin",
     }).then((res) => {
       if (res.error) {
-        alert("Wrong Credentials");
+        toast.error("Wrong Credentials or Contact admin for account activation");
         captchaRef.current.reset();
       } else {
         toast.success("Captcha verified, logging in...");
-        captchaRef.current.reset();
+        // captchaRef.current.reset();
         router.push("/dashboardAdmin");
       }
       return res;
