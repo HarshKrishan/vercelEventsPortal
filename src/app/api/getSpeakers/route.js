@@ -2,10 +2,10 @@ import connectSql, { connection } from "../connectDb/route";
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 export async function POST(req) {
-  const session = await getServerSession();
-  if (!session) {
-    return;
-  }
+  // const session = await getServerSession();
+  // if (!session) {
+  //   return;
+  // }
 
   const { speaker_Id } = await req.json();
   connectSql();

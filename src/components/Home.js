@@ -17,10 +17,6 @@ export default function Home() {
     name: "",
     date: "",
     description: "",
-    organiser: "",
-    link: "",
-    fundedBy: "",
-    fund: "",
     eTime:"",
     numParticipants:"",
     speaker_id:"",
@@ -36,10 +32,6 @@ export default function Home() {
       name: "",
       date: "",
       description: "",
-      organiser: "",
-      link: "",
-      fundedBy: "",
-      fund: "",
       eTime: "",
       numParticipants: "",
       speaker_id: "",
@@ -183,17 +175,13 @@ export default function Home() {
                       onClick={() => {
                         setVisible(true)
                         setEventDataToShow({
-                          eventId: event.eId,
+                          eventId: event.id,
                           name: event.eName,
                           date: getDate(event.eDate),
-                          description: event.eDesc,
-                          organiser: event.eOrgEmail,
-                          link: event.eLink,
-                          fundedBy: event.eFundedBy,
-                          fund: event.eFund,
+                          description: event.description,
                           eTime: event.eTime,
-                          numParticipants: event.eNumParticipants,
-                          speaker_id: event.eSpeakerId,
+                          numParticipants: event.numParticipants,
+                          speaker_id: event.speaker_Id,
                         });
                       }
                     }
@@ -251,17 +239,13 @@ export default function Home() {
                     onClick={() => {
                       setVisible(true)
                       setEventDataToShow({
-                        eventId: event.eId,
+                        eventId: event.id,
                         name: event.eName,
                         date: getDate(event.eDate),
-                        description: event.eDesc,
-                        organiser: event.eOrgEmail,
-                        link: event.eLink,
-                        fundedBy: event.eFundedBy,
-                        fund: event.eFund,
+                        description: event.description,
                         eTime: event.eTime,
-                        numParticipants: event.eNumParticipants,
-                        speaker_id: event.eSpeakerId,
+                        numParticipants: event.numParticipants,
+                        speaker_id: event.speaker_Id,
                       });
                     }}
                     className="flex flex-col justify-center items-center w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5 hover:cursor-pointer"

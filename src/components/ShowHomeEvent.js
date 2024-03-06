@@ -6,12 +6,11 @@ import { useState } from "react";
 const ShowHomeEvent = ({ visible, handleCLick, data }) => {
 
     const [speakers, setSpeakers] = useState([]);
-    const [numParticipants, setNumParticipants] = useState(0);
 
     useEffect(() => {
         if (visible) {
             const speaker_Id = data.speaker_id;
-            fetch("http://localhost:3000/api/getSpeaker", {
+            fetch("http://localhost:3000/api/getSpeakers", {
                 method: "POST",
                 body: JSON.stringify({ speaker_Id }),
                 headers: {
@@ -19,6 +18,7 @@ const ShowHomeEvent = ({ visible, handleCLick, data }) => {
                 }
             })
                 .then((response) => {
+                    console.log(response);
                     if (!response.ok) {
                         throw new Error(`HTTP error! Status: ${response.status}`);
                     }

@@ -26,7 +26,9 @@ events.map((event) => {
         eName: event.eName,
         description: event.description,
         eDate: event.eDate,
-        eTime:event.eTime
+        eTime:event.eTime,
+        numParticipants: event.numParticipants,
+        speaker_Id: event.speaker_Id,
     });
 });
 
