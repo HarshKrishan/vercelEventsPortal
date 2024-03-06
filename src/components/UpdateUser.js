@@ -75,7 +75,7 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((error) => {
+      .catch((error) => {
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,
@@ -116,7 +116,7 @@ const UpdateUser = ({ visible, handleCLick, data }) => {
         setRole("admin");
         handleCLick();
       })
-      .then((erorr) => {
+      .catch((erorr) => {
         toast.error("Something went wrong!", {
           position: "top-right",
           autoClose: 5000,

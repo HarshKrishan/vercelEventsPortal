@@ -87,10 +87,12 @@ export default function Form({ siteKey }) {
           <h1 className="text-center font-bold text-4xl  text-teal-400 mt-4 mb-6">
             Login
           </h1>
-
+          
           <input
             className="m-2 rounded-md p-1 w-3/5 border-2 border-gray-600"
             type="email"
+            id="email"
+            autoComplete="off"
             value={email}
             placeholder="Email"
             onChange={(e) => setEmail(e.target.value)}
@@ -98,6 +100,8 @@ export default function Form({ siteKey }) {
           <input
             className="m-2 rounded-md p-1 w-3/5 border-2 border-gray-600"
             type="password"
+            id="password"
+            autoComplete="off"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
