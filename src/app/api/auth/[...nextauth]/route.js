@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CrediantialsProvider from "next-auth/providers/credentials";
 import connectSql, { connection } from "@/app/api/connectDb/route";
+import crypto from "crypto";
 const authOptions = {
   session: {
     strategy: "jwt",
@@ -29,7 +30,23 @@ const authOptions = {
           });
 
         const user = rows[0];
+        //hashpassword code
+        // const hashedPassword = crypto
+        //   .createHash("sha256")
+        //   .update(credentials.password)
+        //   .digest("hex");
+        // if (user && user.pwd === hashedPassword) {
+        //   if(user.status === "inactive") return null;
+        //   return {
+        //     fname: user.fName,
+        //     lname: user.lName,
+        //     email: user.emailId,
+        //     role: user.role,
+        //     status: user.status,
+        //   };
+        // }
 
+        //without hashing password
         if (user && user.pwd === credentials.password) {
           if(user.status === "inactive") return null;
           return {

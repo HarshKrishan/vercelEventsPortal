@@ -210,7 +210,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
                 <span className="font-normal">{data.fundedBy}</span>
               </li>
               <li className="my-1 font-semibold">
-                Event Fund: <span className="font-normal">{data.fund}</span>
+                Event Budget: <span className="font-normal">{data.fund}</span>
               </li>
               <li className="my-1 font-semibold">
                 Event Link: <span className="font-normal">{data.link}</span>

@@ -200,7 +200,7 @@ const AddEvent = ({ visible, handleCLick }) => {
                 }}
               />
 
-              <label className="text-black w-3/5">Event Fund</label>
+              <label className="text-black w-3/5">Event Budget</label>
 
               <input
                 className="m-2 rounded-md p-1 w-3/5"
