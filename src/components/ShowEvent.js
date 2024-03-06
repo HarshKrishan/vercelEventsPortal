@@ -198,7 +198,7 @@ const ShowEvent = ({ visible, handleCLick, data }) => {
                 <span className="font-normal">
                   { speakers &&
                     speakers.map((speaker,index) => (
-                    <p key={index}>{speaker.title+" "+speaker.affiliation}</p>
+                    <p key={index}>{speaker.title+" "+speaker.name+" "+speaker.affiliation}</p>
                   ))}
                 </span>
 

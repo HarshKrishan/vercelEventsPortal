@@ -1,8 +1,10 @@
+import { set } from "date-fns";
 import React from "react";
 
 const CustomInput = ({ speakers, addSpeaker, handleDelete }) => {
   const [title, setTitle] = React.useState("Mr");
   const [affiliation, setAffiliation] = React.useState("");
+  const [name, setName] = React.useState(""); 
 
   const [show, setShow] = React.useState(false);
 
@@ -10,10 +12,11 @@ const CustomInput = ({ speakers, addSpeaker, handleDelete }) => {
 
   function addThisSpeaker() {
     if (isOpen) {
-      if (title.length > 0 && affiliation.length > 0) {
-        addSpeaker(title, affiliation);
+      if (title.length > 0 && affiliation.length > 0 && name.length > 0) {
+        addSpeaker(title,name, affiliation);
         setTitle("Mr");
         setAffiliation("");
+        setName("");
       }
 
       setShow(false);
@@ -42,6 +45,7 @@ const CustomInput = ({ speakers, addSpeaker, handleDelete }) => {
                 className="flex justify-start gap-x-2 w-3/5 ml-5"
               >
                 <p>{speaker.title}</p>
+                <p>{speaker.name}</p>
                 <p>{speaker.affiliation}</p>
                 <button
                   onClick={() => {
@@ -83,6 +87,20 @@ const CustomInput = ({ speakers, addSpeaker, handleDelete }) => {
             <option value="Prof">Prof</option>
             <option value="">Prefer not to Say</option>
           </select>
+          <br />
+          <label for="name">Name</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            placeholder="Name"
+            autoComplete="off"
+            className="m-2 rounded-md p-1 w-3/5"
+            value={name}
+            onChange={(e) => {
+              setName(e.target.value);
+            }}
+          />
           <br />
           <label for="affiliation">Affiliation</label>
           <input

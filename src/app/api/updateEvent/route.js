@@ -38,7 +38,7 @@ export async function POST(req) {
         const query2 = `delete from speakers where id='${speaker_Id}'`;
         connection.promise().query(query2).then(([data, fields]) => {
           speakers.forEach(async (speaker) => {
-            const query3 = `INSERT INTO speakers (id,title,affiliation) values ('${speaker_Id}','${speaker.title}','${speaker.affiliation}')`;
+            const query3 = `INSERT INTO speakers (id,title,name,affiliation) values ('${speaker_Id}','${speaker.title}','${speaker.name}','${speaker.affiliation}')`;
             await connection
               .promise()
               .query(query3)
