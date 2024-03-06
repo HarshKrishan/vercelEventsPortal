@@ -34,7 +34,7 @@ export async function POST(req) {
     .query(query)
     .then(([data, fields]) => {
       speakers.forEach(async (speaker) => {
-        const query2 = `INSERT INTO speakers (id,title,affiliation) values ('${randomId}','${speaker.title}','${speaker.affiliation}')`;
+        const query2 = `INSERT INTO speakers (id,title,name,affiliation) values ('${randomId}','${speaker.title}','${speaker.name}','${speaker.affiliation}')`;
         await connection
           .promise()
           .query(query2)

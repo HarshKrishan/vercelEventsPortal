@@ -43,8 +43,8 @@ const UpdateEvent = ({ visible, handleCLick, data }) => {
   });
   const [speakers, setSpeakers] = useState([]);
 
-  const addSpeaker = (title, affiliation) => {
-    setSpeakers([...speakers, { title, affiliation }]);
+  const addSpeaker = (title,name, affiliation) => {
+    setSpeakers([...speakers, { title,name, affiliation }]);
   };
 
   function handleDelete(index) {
