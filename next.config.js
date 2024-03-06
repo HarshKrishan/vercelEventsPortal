@@ -7,6 +7,8 @@ const nextConfig = {
   env:{
     NEXTAUTH_URL:"http://localhost:3000",
     NEXTAUTH_SECRET:"8dfsaa9sf77f8as7f9af8df7aj2h52m5vg5d",
+    SITE_KEY:"6LfpMGYpAAAAABdEDWeYlgVF9oPXixbsfUlT4fyQ",
+    SECRET_KEY:"6LfpMGYpAAAAAHJbAlHD13_4fcU6j_qF85akJAqu"
   },
   async headers() {
     return [
