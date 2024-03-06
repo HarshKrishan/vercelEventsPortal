@@ -9,7 +9,6 @@ import Events from "@/components/Events";
 import { getSession } from "next-auth/react";
 
 function Page() {
-
   const [currentUser, setCurrentUser] = useState({
     fname: "",
     lname: "",

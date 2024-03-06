@@ -3,16 +3,41 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ReactPaginate from "react-paginate";
+import ShowHomeEvent from "./ShowHomeEvent";
 export default function Home() {
   const [events, setEvents] = useState([]);
   const [selected, setSelected] = useState("upcoming");
+  const [visible, setVisible] = useState(false);
 
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [recentEvents, setRecentEvents] = useState([]);
 
+  const [eventDataToShow, setEventDataToShow] = useState({
+    eventId: "",
+    name: "",
+    date: "",
+    description: "",
+    eTime:"",
+    numParticipants:"",
+    speaker_id:"",
+  });
+
   const handleButtonClick = (buttonType) => {
     setSelected(buttonType);
   };
+
+  function handleCLickShowEvent() {
+    setEventDataToShow({
+      eventId: "",
+      name: "",
+      date: "",
+      description: "",
+      eTime: "",
+      numParticipants: "",
+      speaker_id: "",
+    });
+    setVisible(false);
+  }
 
   function separateEvents(Events) {
     if (upcomingEvents.length > 0 || recentEvents.length > 0) {
@@ -147,7 +172,21 @@ export default function Home() {
                   {currentUpComingEvents.map((event, index) => (
                     <div
                       key={index + 1}
-                      className="flex flex-col justify-center items-center m-2 w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5"
+                      onClick={() => {
+                        setVisible(true)
+                        setEventDataToShow({
+                          eventId: event.id,
+                          name: event.eName,
+                          date: getDate(event.eDate),
+                          description: event.description,
+                          eTime: event.eTime,
+                          numParticipants: event.numParticipants,
+                          speaker_id: event.speaker_Id,
+                        });
+                      }
+                    }
+
+                      className="flex flex-col justify-center items-center m-2 w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5 hover:cursor-pointer"
                     >
                       <div className="flex justify-center items-center  h-1/2 ">
                         <Image
@@ -197,7 +236,19 @@ export default function Home() {
                 {currentRecentEvents.map((event, index) => (
                   <div
                     key={index + 1}
-                    className="flex flex-col justify-center items-center w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5"
+                    onClick={() => {
+                      setVisible(true)
+                      setEventDataToShow({
+                        eventId: event.id,
+                        name: event.eName,
+                        date: getDate(event.eDate),
+                        description: event.description,
+                        eTime: event.eTime,
+                        numParticipants: event.numParticipants,
+                        speaker_id: event.speaker_Id,
+                      });
+                    }}
+                    className="flex flex-col justify-center items-center w-72 h-72 rounded-lg bg-white bg-opacity-50 border-black border-2 border-opacity-5 hover:shadow-xl pt-5 hover:cursor-pointer"
                   >
                     <div className="flex justify-center items-center  h-1/2 ">
                       <Image
@@ -234,6 +285,13 @@ export default function Home() {
             </div>
           )}
         </div>
+      </div>
+      <div className="absolute z-10 bottom-0 w-full">
+        <ShowHomeEvent
+          visible={visible}
+          data={eventDataToShow}
+          handleCLick={handleCLickShowEvent}
+        />
       </div>
     </div>
     );      
