@@ -9,5 +9,12 @@ export default async function Page() {
     redirect("/dashboardAdmin");
   }
 
-  return <Home />;
+  return (
+    <div className="">
+      <Home />
+      {/* <div className="fixed bottom-0 mb-2 z-[-1] w-full opacity-50 text-center">
+        <p>Made by Harsh Aggarwal (2020508) and Harsh Krishan (2020509)</p>
+      </div> */}
+    </div>
+  );
 }

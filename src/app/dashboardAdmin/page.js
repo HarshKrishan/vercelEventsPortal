@@ -7,6 +7,9 @@ import { DatePickerWithRange } from "@/components/ui/datePickerWithRange";
 import UpdateEvent from "@/components/UpdateEvent";
 import Events from "@/components/Events";
 import { getSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { json2csv } from "json-2-csv";
+
 
 function Page() {
   const [currentUser, setCurrentUser] = useState({
@@ -215,31 +218,38 @@ function Page() {
       });
   }, [visible, visibleShowEvent, visibleUpdateEvent]);
 
-  function handleDownloadButton() {
-    let dataObjToWrite = events;
-    let filename = "events.json";
-    const saveTemplateAsFile = (filename, dataObjToWrite) => {
-      const blob = new Blob([JSON.stringify(dataObjToWrite)], {
-        type: "text/json",
-      });
-      const link = document.createElement("a");
+  
+  async function handleDownloadButton(mode) {
+    
+    let dataObjToWrite = await fetch("http://localhost:3000/api/getData", {
+      method: "POST",
+      body: JSON.stringify({
+        email: currentUser.email,
+        role: currentUser.role,
+        startDate: mode=="all"? null: date.from,
+        endDate: mode=="all"? null: date.to,
+      }),
+    }).then((res) => res.json()).then((json)=>{
+      return json.result;
+    }).catch((err) => {
 
-      link.download = filename;
-      link.href = window.URL.createObjectURL(blob);
-      link.dataset.downloadurl = ["text/json", link.download, link.href].join(
-        ":"
-      );
+      console.log(err);
+      toast.error("Error in downloading file");
+      return;
+    });
+    dataObjToWrite = await json2csv(dataObjToWrite);
+    let filename = "data.csv";
+    
+    const blob = new Blob([dataObjToWrite], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
 
-      const evt = new MouseEvent("click", {
-        view: window,
-        bubbles: true,
-        cancelable: true,
-      });
-
-      link.dispatchEvent(evt);
-      link.remove();
-    };
-    saveTemplateAsFile(filename, dataObjToWrite);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   }
   return (
     <div className="overflow-hidden">

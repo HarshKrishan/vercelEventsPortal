@@ -1,5 +1,6 @@
 import React from "react";
 import EventTableRow from "./EventTableRow";
+import Image from "next/image";
 function Events({
   events,
   markShowEventTrue,
@@ -70,14 +71,23 @@ function Events({
           </table>
         </div>
       </div>
-      <div className="flex items-end mt-5 flex-col w-full">
+      <div className="flex items-start justify-end w-full gap-2 pt-3">
         <button
-          className="text-black bg-teal-400 rounded-md p-1 w-1/7 hover:bg-teal-500"
+          className="text-black bg-teal-400 rounded-md p-2 w-1/7 hover:bg-teal-500 "
           onClick={() => {
-            handleDownloadButton();
+            handleDownloadButton("chosen");
           }}
         >
-          Download Data!
+          Download By Date Range
+        </button>
+
+        <button
+          className="text-black bg-teal-400 rounded-md p-2 w-1/7 hover:bg-teal-500"
+          onClick={() => {
+            handleDownloadButton("all");
+          }}
+        >
+          Download All
         </button>
       </div>
     </>
